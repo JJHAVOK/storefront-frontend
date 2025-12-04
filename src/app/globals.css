@@ -1,0 +1,5 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add any global overrides here if needed, otherwise let Bootstrap handle it */
