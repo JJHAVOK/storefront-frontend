@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
+import { Header } from "@/components/Header"; // We will create this next
+import { Footer } from "@/components/Footer"; // We will create this next
 
 export const metadata: Metadata = {
-  title: "PixelForge Developer | Enterprise Software Solutions",
-  description: "Professional software development and consulting services.",
+  title: "PixelSolutions | Custom Web Development",
+  description: "Full-Stack Solutions for Any Industry",
 };
 
 export default function RootLayout({
@@ -15,30 +17,39 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* --- GLOBAL STYLESHEETS --- */}
-        {/* These load from /public/assets/css/ */}
-        <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/assets/css/bootstrap-grid.min.css" />
-        <link rel="stylesheet" href="/assets/css/bootstrap-reboot.min.css" />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {/* Your Custom Main Style */}
-        <link rel="stylesheet" href="/assets/css/styles.css" />
+        {/* --- FONTS & ICONS --- */}
+        {/* FontAwesome (from Homepage) */}
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossOrigin="anonymous" defer></script>
         
-        {/* Optional: Add Google Fonts here if your old index.html had them */}
+        {/* RemixIcons (from Inner Pages) */}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" />
+        
+        {/* Google Fonts (Both Sets) */}
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+        {/* --- GLOBAL CSS --- */}
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="/assets/css/styles.css" rel="stylesheet" />
       </head>
-      <body className="antialiased">
+      <body id="page-top">
         
-        {/* The Main Page Content Injection */}
+        {/* Global Header */}
+        <Header />
+        
+        {/* Main Page Content */}
         {children}
 
-        {/* --- GLOBAL SCRIPTS --- */}
-        {/* Strategy='beforeInteractive' is crucial for jQuery to load before other scripts */}
+        {/* Global Footer */}
+        <Footer />
+
+        {/* --- SCRIPTS --- */}
         <Script src="/assets/js/jquery.min.js" strategy="beforeInteractive" />
-        
-        {/* Bootstrap loads after the page is interactive */}
         <Script src="/assets/js/bootstrap.min.js" strategy="lazyOnload" />
-        
-        {/* Your custom JS (animations, etc) */}
         <Script src="/assets/js/main.js" strategy="lazyOnload" />
       </body>
     </html>

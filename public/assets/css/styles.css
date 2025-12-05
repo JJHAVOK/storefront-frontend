@@ -2034,3 +2034,19 @@ textarea {
     outline: none;
     box-shadow: 0 0 0 3px #629edb; 
 }
+
+
+/* Custom Storefront Enhancements */
+.shadow-hover {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.shadow-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.15)!important;
+}
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
