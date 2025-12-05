@@ -9,9 +9,10 @@ interface AuthModalProps {
   mode: 'login' | 'register';
   onSwitch: () => void; 
   onClose: () => void; 
+  preventRedirect?: boolean; // <-- NEW PROP
 }
 
-export function AuthModal({ mode, onSwitch, onClose }: AuthModalProps) {
+export function AuthModal({ mode, onSwitch, onClose, preventRedirect = false }: AuthModalProps) {
   const router = useRouter();
   const { login } = useAuthStore();
   
@@ -72,8 +73,15 @@ export function AuthModal({ mode, onSwitch, onClose }: AuthModalProps) {
           password: formData.password 
         });
         login(res.data.access_token, res.data.user);
+        
         onClose(); 
-        router.push('/dashboard'); 
+        
+        // --- 👇 MODIFIED REDIRECT LOGIC 👇 ---
+        if (!preventRedirect) {
+            router.push('/dashboard'); 
+        }
+        // --- 👆 END MODIFICATION 👆 ---
+
       } else {
         // REGISTER
         console.log('Submitting registration:', formData);
@@ -107,7 +115,6 @@ export function AuthModal({ mode, onSwitch, onClose }: AuthModalProps) {
 
   return (
     <>
-      {/* Wrapper: Covers screen, handles background click to close */}
       <div 
         className="modal fade show" 
         style={{ display: 'block', zIndex: 9999, backgroundColor: 'rgba(0,0,0,0.6)' }} 
@@ -121,7 +128,6 @@ export function AuthModal({ mode, onSwitch, onClose }: AuthModalProps) {
         >
           <div className="modal-content shadow-lg border-0">
             
-            {/* Header */}
             <div className="modal-header border-0 pb-0">
               <h5 className="modal-title fw-bold text-uppercase text-dark">
                 {mode === 'login' ? 'Welcome Back' : 'Create Account'}
@@ -187,7 +193,6 @@ export function AuthModal({ mode, onSwitch, onClose }: AuthModalProps) {
                     onChange={e => setFormData({...formData, password: e.target.value})}
                   />
                   
-                  {/* --- PASSWORD STRENGTH BAR --- */}
                   {mode === 'register' && formData.password && (
                     <div className="mt-2">
                         <div className="progress" style={{ height: '5px' }}>

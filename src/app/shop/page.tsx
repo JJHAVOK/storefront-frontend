@@ -4,24 +4,8 @@ import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { useCartStore } from '@/lib/cartStore';
 import Link from 'next/link';
+import { Toast } from '@/components/Toast';
 
-// --- TOAST COMPONENT ---
-function Toast({ message, show, onClose }: { message: string, show: boolean, onClose: () => void }) {
-  // Force display block if show is true
-  if (!show) return null;
-  return (
-    // Fixed zIndex and Position
-    <div className="position-fixed top-0 end-0 p-4" style={{ zIndex: 100000, marginTop: '80px' }}>
-      {/* Added d-block to ensure it is not hidden */}
-      <div className="toast show d-block align-items-center text-white bg-success border-0 shadow-lg" role="alert">
-        <div className="d-flex">
-          <div className="toast-body fs-6"><i className="fas fa-check-circle me-2"></i> {message}</div>
-          <button type="button" className="btn-close btn-close-white me-2 m-auto" onClick={onClose}></button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function ShopPage() {
   const [products, setProducts] = useState<any[]>([]);

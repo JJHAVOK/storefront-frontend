@@ -11,6 +11,7 @@ interface User {
   bio?: string;
   avatarUrl?: string;
   publicSlug?: string;
+  metadata?: any;
 }
 
 interface AuthState {

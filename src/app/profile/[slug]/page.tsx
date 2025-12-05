@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import api from '@/lib/api';
 import Link from 'next/link';
+// --- 👇 IMPORT HELPER 👇 ---
+import { getAvatarUrl } from '@/lib/utils';
+// --- 👆 END IMPORT 👆 ---
 
 export default function PublicProfilePage() {
   const { slug } = useParams();
@@ -11,12 +14,9 @@ export default function PublicProfilePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mock data fallback until backend is ready
     api.get(`/customer/public/${slug}`)
       .then(res => setProfile(res.data))
-      .catch(() => {
-          console.log("Profile not found or API missing");
-      })
+      .catch(() => console.log("Profile not found"))
       .finally(() => setLoading(false));
   }, [slug]);
 
@@ -29,10 +29,12 @@ export default function PublicProfilePage() {
             <div className="card border-0 shadow-sm overflow-hidden">
                 <div className="card-header bg-dark text-white p-5 text-center" style={{ backgroundImage: 'url(/assets/img/header-bg.jpg)' }}>
                     <img 
-                        src={profile.avatarUrl || `https://ui-avatars.com/api/?name=${profile.firstName}+${profile.lastName}&size=128`} 
+                        // --- 👇 USE HELPER 👇 ---
+                        src={getAvatarUrl(profile)} 
                         className="rounded-circle border border-4 border-white shadow-lg mb-3"
                         width="128" height="128"
                         alt="Avatar"
+                        style={{ objectFit: 'cover' }}
                     />
                     <h2 className="fw-bold">{profile.firstName} {profile.lastName}</h2>
                     <p className="lead mb-0">{profile.title || 'Member'}</p>
@@ -40,8 +42,6 @@ export default function PublicProfilePage() {
                 <div className="card-body p-5">
                     <h4 className="fw-bold">About</h4>
                     <p className="text-muted">{profile.bio || "This user has not added a bio yet."}</p>
-                    
-                    {/* Add more sections: Projects, Badges, etc. */}
                 </div>
             </div>
         </div>

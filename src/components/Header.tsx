@@ -6,6 +6,9 @@ import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/authStore';
 import { useCartStore } from '@/lib/cartStore';
 import { AuthModal } from './AuthModal';
+// --- 👇 IMPORT HELPER 👇 ---
+import { getAvatarUrl } from '@/lib/utils'; 
+// --- 👆 END IMPORT 👆 ---
 
 export function Header() {
   const { user, logout } = useAuthStore();
@@ -46,16 +49,6 @@ export function Header() {
 
   const isActive = (path: string) => pathname === path ? 'active' : '';
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
-
-  // Helper to get Avatar URL (Real or Fallback)
-  const getAvatar = () => {
-    if (user?.avatarUrl) return user.avatarUrl;
-    if (user?.firstName) {
-       // Fixed color (0D8ABC is a nice blue), no random
-       return `https://ui-avatars.com/api/?name=${user.firstName}+${user.lastName}&background=0D8ABC&color=fff`;
-    }
-    return null;
-  };
 
   return (
     <>
@@ -129,13 +122,14 @@ export function Header() {
                           style={{ height: '45px', borderRadius: '8px', fontWeight: '600', minWidth: '160px', justifyContent: 'space-between' }}
                         >
                           <div className="d-flex align-items-center">
-                              {/* --- AVATAR LOGIC --- */}
+                              {/* --- 👇 USE HELPER 👇 --- */}
                               <img 
-                                  src={getAvatar() || ''} 
+                                  src={getAvatarUrl(user)} 
                                   alt="Profile" 
                                   className="rounded-circle me-2" 
                                   style={{ width: '24px', height: '24px', objectFit: 'cover' }}
                               />
+                              {/* --- 👆 END USE 👆 --- */}
                               <span className="text-truncate" style={{ maxWidth: '100px' }}>{user.firstName}</span>
                           </div>
                         </button>
