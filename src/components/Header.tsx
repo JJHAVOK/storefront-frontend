@@ -6,9 +6,8 @@ import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/authStore';
 import { useCartStore } from '@/lib/cartStore';
 import { AuthModal } from './AuthModal';
-// --- 👇 IMPORT HELPER 👇 ---
 import { getAvatarUrl } from '@/lib/utils'; 
-// --- 👆 END IMPORT 👆 ---
+import api from '@/lib/api';
 
 export function Header() {
   const { user, logout } = useAuthStore();
@@ -41,7 +40,13 @@ export function Header() {
     setShowAuthModal(true);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+       // Call backend to log the event
+       await api.post('/customer/auth/logout');
+    } catch(e) {
+       console.error("Logout log failed", e);
+    }
     logout();
     setShowDropdown(false);
     window.location.href = '/';
@@ -122,14 +127,13 @@ export function Header() {
                           style={{ height: '45px', borderRadius: '8px', fontWeight: '600', minWidth: '160px', justifyContent: 'space-between' }}
                         >
                           <div className="d-flex align-items-center">
-                              {/* --- 👇 USE HELPER 👇 --- */}
                               <img 
                                   src={getAvatarUrl(user)} 
                                   alt="Profile" 
-                                  className="rounded-circle me-2" 
-                                  style={{ width: '24px', height: '24px', objectFit: 'cover' }}
+                                  className="rounded-circle" 
+                                  // --- FIX: Increased margin to 10px ---
+                                  style={{ width: '24px', height: '24px', objectFit: 'cover', marginRight: '10px' }}
                               />
-                              {/* --- 👆 END USE 👆 --- */}
                               <span className="text-truncate" style={{ maxWidth: '100px' }}>{user.firstName}</span>
                           </div>
                         </button>

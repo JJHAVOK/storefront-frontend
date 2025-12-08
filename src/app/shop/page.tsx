@@ -3,9 +3,7 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
 import { useCartStore } from '@/lib/cartStore';
-import Link from 'next/link';
-import { Toast } from '@/components/Toast';
-
+import { StatusModal } from '@/components/StatusModal'; // <-- Use Standard Modal
 
 export default function ShopPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -16,7 +14,9 @@ export default function ShopPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [showToast, setShowToast] = useState(false);
+
+  // --- NEW STANDARD STATUS MODAL STATE ---
+  const [status, setStatus] = useState({ show: false, title: '', message: '', type: 'success' as 'success' | 'error' });
 
   useEffect(() => {
     api.get('/ecommerce/products')
@@ -38,8 +38,15 @@ export default function ShopPage() {
 
   const handleAddToCart = (product: any) => {
       addItem({ id: product.id, name: product.name, price: product.price, quantity: 1 });
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
+      
+      // --- USE STANDARD MODAL ---
+      setStatus({ 
+          show: true, 
+          title: 'Added to Cart', 
+          message: `${product.name} has been added to your cart.`, 
+          type: 'success' 
+      });
+      
       if(selectedProduct) setSelectedProduct(null);
   };
 
@@ -47,9 +54,15 @@ export default function ShopPage() {
 
   return (
     <main>
-      <Toast message="Item added to cart successfully!" show={showToast} onClose={() => setShowToast(false)} />
+      {/* --- STANDARD STATUS MODAL --- */}
+      <StatusModal 
+         show={status.show} 
+         title={status.title} 
+         message={status.message} 
+         type={status.type} 
+         onClose={() => setStatus({ ...status, show: false })} 
+      />
 
-      {/* --- COMPACT HEADER --- */}
       <header className="bg-dark" style={{ marginTop: '56px', height: '200px', display: 'flex', alignItems: 'center' }}>
         <div className="container px-4 px-lg-5">
              <div className="text-center text-white">
@@ -106,15 +119,12 @@ export default function ShopPage() {
           <div className="card border-0 shadow-sm mb-5 rounded-3 overflow-hidden" style={{ transform: 'translateY(-50px)' }}>
              <div className="card-body p-4 bg-white">
                 <div className="row g-3 align-items-center">
-                    
-                    {/* Search Input */}
                     <div className="col-md-6">
                         <div 
                            className="input-group input-group-lg border-0 rounded-3 overflow-hidden shadow-none"
-                           style={{ backgroundColor: 'transparent' }}
+                           style={{ backgroundColor: '#f3f3f3' }}
                         >
-                           {/* Search Icon with Spacing */}
-                           <span className="input-group-text border-0 ps-4 pe-2" style={{ backgroundColor: 'transparent', marginRight: '5px' }}>
+                           <span className="input-group-text border-0 ps-4" style={{ backgroundColor: 'transparent', marginRight: '3px' }}>
                                <i className="fas fa-search text-muted"></i>
                            </span>
                            <input 
@@ -123,21 +133,20 @@ export default function ShopPage() {
                               placeholder="Search products..." 
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
-                              style={{ fontSize: '1rem', backgroundColor: 'rgb(243, 243, 243)' }}
+                              style={{ fontSize: '1rem', backgroundColor: 'transparent' }}
                            />
                         </div>
                     </div>
 
-                    {/* Custom Filter Dropdown */}
                     <div className="col-md-3">
-                       <div className="position-relative rounded-3 shadow-none" style={{ backgroundColor: 'transparent' }}>
+                       <div className="position-relative rounded-3 shadow-none" style={{ backgroundColor: '#f3f3f3' }}>
                            <select 
                               className="form-select form-select-lg border-0 w-100 shadow-none"
                               style={{ 
                                   fontSize: '0.95rem', 
                                   fontWeight: '500', 
                                   color: '#495057',
-                                  backgroundColor: 'rgb(243, 243, 243)',
+                                  backgroundColor: 'transparent',
                                   appearance: 'none', 
                                   WebkitAppearance: 'none',
                                   paddingLeft: '1.5rem',
@@ -155,9 +164,8 @@ export default function ShopPage() {
                               <option value="CUSTOM">Custom Orders</option>
                            </select>
                            
-                           {/* Arrow Icon - Positioned Absolutely within the relative wrapper */}
                            <div 
-                                className="position-absolute top-50 end-0 translate-middle-y me-3 pointer-events-none"
+                                className="position-absolute top-50 end-0 translate-middle-y me-3"
                                 style={{ pointerEvents: 'none' }}
                            >
                               <i className="fas fa-chevron-down text-muted small"></i>
