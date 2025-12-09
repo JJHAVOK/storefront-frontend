@@ -8,6 +8,8 @@ import { useCartStore } from '@/lib/cartStore';
 import { AuthModal } from './AuthModal';
 import { getAvatarUrl } from '@/lib/utils'; 
 import api from '@/lib/api';
+// --- 👇 NEW IMPORT 👇 ---
+import { StorefrontNotifications } from './StorefrontNotifications';
 
 export function Header() {
   const { user, logout } = useAuthStore();
@@ -42,7 +44,6 @@ export function Header() {
 
   const handleLogout = async () => {
     try {
-       // Call backend to log the event
        await api.post('/customer/auth/logout');
     } catch(e) {
        console.error("Logout log failed", e);
@@ -85,6 +86,7 @@ export function Header() {
                   <div className="nav-main-links">
                       <Link href="/" className={isActive('/')}>Home</Link>
                       <Link href="/shop" className={isActive('/shop')}>Shop</Link>
+                      <Link href="/blog" className={isActive('/blog')}>Blog</Link>
                       <Link href="/projects" className={isActive('/projects')}>Projects</Link>
                       <Link href="/about" className={isActive('/about')}>About Us</Link>
                       <Link href="/contact" className={isActive('/contact')}>Contact</Link>
@@ -116,53 +118,60 @@ export function Header() {
                     )}
                  </Link>
 
-                 {/* Auth Buttons */}
+                 {/* Auth Section */}
                  <div style={{ marginRight: '15px' }}> 
                    {isHydrated && user ? (
-                      <div className="dropdown" ref={dropdownRef} style={{ position: 'relative' }}>
-                        <button 
-                          className="btn btn-outline-dark dropdown-toggle d-flex align-items-center px-2" 
-                          type="button" 
-                          onClick={() => setShowDropdown(!showDropdown)}
-                          style={{ height: '45px', borderRadius: '8px', fontWeight: '600', minWidth: '160px', justifyContent: 'space-between' }}
-                        >
-                          <div className="d-flex align-items-center">
-                              <img 
-                                  src={getAvatarUrl(user)} 
-                                  alt="Profile" 
-                                  className="rounded-circle" 
-                                  // --- FIX: Increased margin to 10px ---
-                                  style={{ width: '24px', height: '24px', objectFit: 'cover', marginRight: '10px' }}
-                              />
-                              <span className="text-truncate" style={{ maxWidth: '100px' }}>{user.firstName}</span>
+                      <div className="d-flex align-items-center">
+                          
+                          <div style={{ marginRight: '15px' }}>
+                              <StorefrontNotifications />
                           </div>
-                        </button>
-                        
-                        <ul 
-                          className={`dropdown-menu dropdown-menu-end ${showDropdown ? 'show' : ''}`} 
-                          style={{ 
-                              display: showDropdown ? 'block' : 'none', 
-                              position: 'absolute', 
-                              right: 0, 
-                              top: '120%', 
-                              zIndex: 9999,
-                              minWidth: '220px',
-                              boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-                              border: 'none',
-                              borderRadius: '12px',
-                              overflow: 'hidden'
-                          }}
-                        >
-                          <li><Link className="dropdown-item py-2" href="/dashboard"><i className="fas fa-tachometer-alt me-2 text-muted"></i> Dashboard</Link></li>
-                          <li><Link className="dropdown-item py-2" href={user?.publicSlug ? `/profile/${user.publicSlug}` : '#'}><i className="fas fa-user me-2 text-muted"></i> My Profile</Link></li>
-                          <li><Link className="dropdown-item py-2" href="/dashboard/orders"><i className="fas fa-box me-2 text-muted"></i> My Orders</Link></li>
-                          <li><Link className="dropdown-item py-2" href="/dashboard/projects"><i className="fas fa-project-diagram me-2 text-muted"></i> Projects</Link></li>
-                          <li><Link className="dropdown-item py-2" href="/dashboard/organization"><i className="fas fa-building me-2 text-muted"></i> Organization</Link></li>
-                          <li><Link className="dropdown-item py-2" href="/dashboard/support"><i className="fas fa-life-ring me-2 text-muted"></i> Support</Link></li>
-                          <li><Link className="dropdown-item py-2" href="/dashboard/settings"><i className="fas fa-cog me-2 text-muted"></i> Settings</Link></li>
-                          <li><hr className="dropdown-divider" /></li>
-                          <li><button className="dropdown-item py-2 text-danger" onClick={handleLogout}><i className="fas fa-sign-out-alt me-2"></i> Logout</button></li>
-                        </ul>
+                          {/* --- 👆 END BELL 👆 --- */}
+
+                          <div className="dropdown" ref={dropdownRef} style={{ position: 'relative' }}>
+                            <button 
+                              className="btn btn-outline-dark dropdown-toggle d-flex align-items-center px-2" 
+                              type="button" 
+                              onClick={() => setShowDropdown(!showDropdown)}
+                              style={{ height: '45px', borderRadius: '8px', fontWeight: '600', minWidth: '160px', justifyContent: 'space-between' }}
+                            >
+                              <div className="d-flex align-items-center">
+                                  <img 
+                                      src={getAvatarUrl(user)} 
+                                      alt="Profile" 
+                                      className="rounded-circle" 
+                                      style={{ width: '24px', height: '24px', objectFit: 'cover', marginRight: '10px' }}
+                                  />
+                                  <span className="text-truncate" style={{ maxWidth: '100px' }}>{user.firstName}</span>
+                              </div>
+                            </button>
+                            
+                            <ul 
+                              className={`dropdown-menu dropdown-menu-end ${showDropdown ? 'show' : ''}`} 
+                              style={{ 
+                                  display: showDropdown ? 'block' : 'none', 
+                                  position: 'absolute', 
+                                  right: 0, 
+                                  top: '120%', 
+                                  zIndex: 9999,
+                                  minWidth: '220px',
+                                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+                                  border: 'none',
+                                  borderRadius: '12px',
+                                  overflow: 'hidden'
+                              }}
+                            >
+                              <li><Link className="dropdown-item py-2" href="/dashboard"><i className="fas fa-tachometer-alt me-2 text-muted"></i> Dashboard</Link></li>
+                              <li><Link className="dropdown-item py-2" href={user?.publicSlug ? `/profile/${user.publicSlug}` : '#'}><i className="fas fa-user me-2 text-muted"></i> My Profile</Link></li>
+                              <li><Link className="dropdown-item py-2" href="/dashboard/orders"><i className="fas fa-box me-2 text-muted"></i> My Orders</Link></li>
+                              <li><Link className="dropdown-item py-2" href="/dashboard/projects"><i className="fas fa-project-diagram me-2 text-muted"></i> Projects</Link></li>
+                              <li><Link className="dropdown-item py-2" href="/dashboard/organization"><i className="fas fa-building me-2 text-muted"></i> Organization</Link></li>
+                              <li><Link className="dropdown-item py-2" href="/dashboard/support"><i className="fas fa-life-ring me-2 text-muted"></i> Support</Link></li>
+                              <li><Link className="dropdown-item py-2" href="/dashboard/settings"><i className="fas fa-cog me-2 text-muted"></i> Settings</Link></li>
+                              <li><hr className="dropdown-divider" /></li>
+                              <li><button className="dropdown-item py-2 text-danger" onClick={handleLogout}><i className="fas fa-sign-out-alt me-2"></i> Logout</button></li>
+                            </ul>
+                          </div>
                       </div>
                    ) : (
                       <button 
