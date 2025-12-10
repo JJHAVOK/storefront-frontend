@@ -8,7 +8,6 @@ import { useCartStore } from '@/lib/cartStore';
 import { AuthModal } from './AuthModal';
 import { getAvatarUrl } from '@/lib/utils'; 
 import api from '@/lib/api';
-// --- 👇 NEW IMPORT 👇 ---
 import { StorefrontNotifications } from './StorefrontNotifications';
 
 export function Header() {
@@ -53,7 +52,7 @@ export function Header() {
     window.location.href = '/';
   };
 
-  const isActive = (path: string) => pathname === path ? 'active' : '';
+  const isActive = (path: string) => pathname === path || pathname.startsWith(path + '/') ? 'active' : '';
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -89,14 +88,31 @@ export function Header() {
                       <Link href="/blog" className={isActive('/blog')}>Blog</Link>
                       <Link href="/projects" className={isActive('/projects')}>Projects</Link>
                       <Link href="/about" className={isActive('/about')}>About Us</Link>
-                      <Link href="/contact" className={isActive('/contact')}>Contact</Link>
                   </div>
               </nav>
               
               <div className="d-flex align-items-center">
-                 
-                 {/* Cart Button */}
-                 <Link 
+                  
+                  {/* --- 👇 "HELP" BUTTON (Fixed Margin) 👇 --- */}
+                  <Link 
+                    href="/knowledge-base" 
+                    className="btn btn-outline-secondary d-none d-md-flex align-items-center justify-content-center"
+                    style={{ 
+                        height: '45px', 
+                        borderRadius: '8px', 
+                        fontWeight: '600', 
+                        padding: '0 15px',
+                        border: '1px solid #dee2e6',
+                        marginRight: '5px' // <--- ADDED AS REQUESTED
+                    }}
+                    title="Knowledge Base / FAQ"
+                  >
+                     <i className="fas fa-question-circle me-2"></i> Help
+                  </Link>
+                  {/* --- 👆 END BUTTON 👆 --- */}
+
+                  {/* Cart Button */}
+                  <Link 
                     href="/cart" 
                     className="btn position-relative d-flex align-items-center justify-content-center"
                     style={{ 
@@ -109,84 +125,83 @@ export function Header() {
                         transition: 'all 0.2s',
                         marginRight: '15px'
                     }}
-                 >
-                    <i className="fas fa-shopping-cart"></i>
-                    {isHydrated && cartCount > 0 && (
-                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '0.65rem', border: '2px solid white' }}>
-                        {cartCount}
-                      </span>
+                  >
+                     <i className="fas fa-shopping-cart"></i>
+                     {isHydrated && cartCount > 0 && (
+                       <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '0.65rem', border: '2px solid white' }}>
+                         {cartCount}
+                       </span>
+                     )}
+                  </Link>
+
+                  {/* Auth Section */}
+                  <div style={{ marginRight: '15px' }}> 
+                    {isHydrated && user ? (
+                       <div className="d-flex align-items-center">
+                           
+                           <div style={{ marginRight: '15px' }}>
+                               <StorefrontNotifications />
+                           </div>
+
+                           <div className="dropdown" ref={dropdownRef} style={{ position: 'relative' }}>
+                             <button 
+                               className="btn btn-outline-dark dropdown-toggle d-flex align-items-center px-2" 
+                               type="button" 
+                               onClick={() => setShowDropdown(!showDropdown)}
+                               style={{ height: '45px', borderRadius: '8px', fontWeight: '600', minWidth: '160px', justifyContent: 'space-between' }}
+                             >
+                               <div className="d-flex align-items-center">
+                                   <img 
+                                       src={getAvatarUrl(user)} 
+                                       alt="Profile" 
+                                       className="rounded-circle" 
+                                       style={{ width: '24px', height: '24px', objectFit: 'cover', marginRight: '10px' }}
+                                   />
+                                   <span className="text-truncate" style={{ maxWidth: '100px' }}>{user.firstName}</span>
+                               </div>
+                             </button>
+                             
+                             <ul 
+                               className={`dropdown-menu dropdown-menu-end ${showDropdown ? 'show' : ''}`} 
+                               style={{ 
+                                   display: showDropdown ? 'block' : 'none', 
+                                   position: 'absolute', 
+                                   right: 0, 
+                                   top: '120%', 
+                                   zIndex: 9999,
+                                   minWidth: '220px',
+                                   boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+                                   border: 'none',
+                                   borderRadius: '12px',
+                                   overflow: 'hidden'
+                               }}
+                             >
+                               <li><Link className="dropdown-item py-2" href="/dashboard"><i className="fas fa-tachometer-alt me-2 text-muted"></i> Dashboard</Link></li>
+                               <li><Link className="dropdown-item py-2" href={user?.publicSlug ? `/profile/${user.publicSlug}` : '#'}><i className="fas fa-user me-2 text-muted"></i> My Profile</Link></li>
+                               <li><Link className="dropdown-item py-2" href="/dashboard/orders"><i className="fas fa-box me-2 text-muted"></i> My Orders</Link></li>
+                               <li><Link className="dropdown-item py-2" href="/dashboard/projects"><i className="fas fa-project-diagram me-2 text-muted"></i> Projects</Link></li>
+                               <li><Link className="dropdown-item py-2" href="/dashboard/organization"><i className="fas fa-building me-2 text-muted"></i> Organization</Link></li>
+                               <li><Link className="dropdown-item py-2" href="/dashboard/support"><i className="fas fa-life-ring me-2 text-muted"></i> Support Tickets</Link></li>
+                               <li><Link className="dropdown-item py-2" href="/dashboard/settings"><i className="fas fa-cog me-2 text-muted"></i> Settings</Link></li>
+                               <li><hr className="dropdown-divider" /></li>
+                               <li><button className="dropdown-item py-2 text-danger" onClick={handleLogout}><i className="fas fa-sign-out-alt me-2"></i> Logout</button></li>
+                             </ul>
+                           </div>
+                       </div>
+                    ) : (
+                       <button 
+                         onClick={openLogin} 
+                         className="btn btn-link text-dark text-decoration-none fw-bold text-uppercase"
+                         style={{ letterSpacing: '1px' }}
+                       >
+                         Log In
+                       </button>
                     )}
-                 </Link>
+                  </div>
 
-                 {/* Auth Section */}
-                 <div style={{ marginRight: '15px' }}> 
-                   {isHydrated && user ? (
-                      <div className="d-flex align-items-center">
-                          
-                          <div style={{ marginRight: '15px' }}>
-                              <StorefrontNotifications />
-                          </div>
-                          {/* --- 👆 END BELL 👆 --- */}
-
-                          <div className="dropdown" ref={dropdownRef} style={{ position: 'relative' }}>
-                            <button 
-                              className="btn btn-outline-dark dropdown-toggle d-flex align-items-center px-2" 
-                              type="button" 
-                              onClick={() => setShowDropdown(!showDropdown)}
-                              style={{ height: '45px', borderRadius: '8px', fontWeight: '600', minWidth: '160px', justifyContent: 'space-between' }}
-                            >
-                              <div className="d-flex align-items-center">
-                                  <img 
-                                      src={getAvatarUrl(user)} 
-                                      alt="Profile" 
-                                      className="rounded-circle" 
-                                      style={{ width: '24px', height: '24px', objectFit: 'cover', marginRight: '10px' }}
-                                  />
-                                  <span className="text-truncate" style={{ maxWidth: '100px' }}>{user.firstName}</span>
-                              </div>
-                            </button>
-                            
-                            <ul 
-                              className={`dropdown-menu dropdown-menu-end ${showDropdown ? 'show' : ''}`} 
-                              style={{ 
-                                  display: showDropdown ? 'block' : 'none', 
-                                  position: 'absolute', 
-                                  right: 0, 
-                                  top: '120%', 
-                                  zIndex: 9999,
-                                  minWidth: '220px',
-                                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-                                  border: 'none',
-                                  borderRadius: '12px',
-                                  overflow: 'hidden'
-                              }}
-                            >
-                              <li><Link className="dropdown-item py-2" href="/dashboard"><i className="fas fa-tachometer-alt me-2 text-muted"></i> Dashboard</Link></li>
-                              <li><Link className="dropdown-item py-2" href={user?.publicSlug ? `/profile/${user.publicSlug}` : '#'}><i className="fas fa-user me-2 text-muted"></i> My Profile</Link></li>
-                              <li><Link className="dropdown-item py-2" href="/dashboard/orders"><i className="fas fa-box me-2 text-muted"></i> My Orders</Link></li>
-                              <li><Link className="dropdown-item py-2" href="/dashboard/projects"><i className="fas fa-project-diagram me-2 text-muted"></i> Projects</Link></li>
-                              <li><Link className="dropdown-item py-2" href="/dashboard/organization"><i className="fas fa-building me-2 text-muted"></i> Organization</Link></li>
-                              <li><Link className="dropdown-item py-2" href="/dashboard/support"><i className="fas fa-life-ring me-2 text-muted"></i> Support</Link></li>
-                              <li><Link className="dropdown-item py-2" href="/dashboard/settings"><i className="fas fa-cog me-2 text-muted"></i> Settings</Link></li>
-                              <li><hr className="dropdown-divider" /></li>
-                              <li><button className="dropdown-item py-2 text-danger" onClick={handleLogout}><i className="fas fa-sign-out-alt me-2"></i> Logout</button></li>
-                            </ul>
-                          </div>
-                      </div>
-                   ) : (
-                      <button 
-                        onClick={openLogin} 
-                        className="btn btn-link text-dark text-decoration-none fw-bold text-uppercase"
-                        style={{ letterSpacing: '1px' }}
-                      >
-                        Log In
-                      </button>
-                   )}
-                 </div>
-
-                 <Link href="/contact" className="btn btn-primary px-4 d-flex align-items-center" style={{ height: '45px', borderRadius: '8px', fontWeight: '700' }}>
-                    Start Project
-                 </Link>
+                  <Link href="/contact" className="btn btn-primary px-4 d-flex align-items-center" style={{ height: '45px', borderRadius: '8px', fontWeight: '700' }}>
+                     Start Project
+                  </Link>
               </div>
           </div>
       </header>
