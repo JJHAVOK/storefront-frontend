@@ -38,9 +38,9 @@ export default function RootLayout({
       <body id="page-top">
         <Header />
         {children}
+        <ChatWidget />
         <Footer />
         <ScrollToTop />
-        <ChatWidget />
       </body>
     </html>
   );

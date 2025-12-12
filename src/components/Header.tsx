@@ -88,12 +88,14 @@ export function Header() {
                       <Link href="/blog" className={isActive('/blog')}>Blog</Link>
                       <Link href="/projects" className={isActive('/projects')}>Projects</Link>
                       <Link href="/about" className={isActive('/about')}>About Us</Link>
+                      {/* Contact restored below */}
+                      <Link href="/contact" className={isActive('/contact')}>Contact</Link>
                   </div>
               </nav>
               
               <div className="d-flex align-items-center">
                   
-                  {/* --- 👇 "HELP" BUTTON (Fixed Margin) 👇 --- */}
+                  {/* Help Center Button */}
                   <Link 
                     href="/knowledge-base" 
                     className="btn btn-outline-secondary d-none d-md-flex align-items-center justify-content-center"
@@ -103,13 +105,12 @@ export function Header() {
                         fontWeight: '600', 
                         padding: '0 15px',
                         border: '1px solid #dee2e6',
-                        marginRight: '5px' // <--- ADDED AS REQUESTED
+                        marginRight: '5px'
                     }}
                     title="Knowledge Base / FAQ"
                   >
                      <i className="fas fa-question-circle me-2"></i> Help
                   </Link>
-                  {/* --- 👆 END BUTTON 👆 --- */}
 
                   {/* Cart Button */}
                   <Link 
@@ -138,7 +139,6 @@ export function Header() {
                   <div style={{ marginRight: '15px' }}> 
                     {isHydrated && user ? (
                        <div className="d-flex align-items-center">
-                           
                            <div style={{ marginRight: '15px' }}>
                                <StorefrontNotifications />
                            </div>
@@ -199,6 +199,7 @@ export function Header() {
                     )}
                   </div>
 
+                  {/* Primary CTA */}
                   <Link href="/contact" className="btn btn-primary px-4 d-flex align-items-center" style={{ height: '45px', borderRadius: '8px', fontWeight: '700' }}>
                      Start Project
                   </Link>

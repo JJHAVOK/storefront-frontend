@@ -31,6 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: 'Projects', href: '/dashboard/projects', icon: 'fas fa-tasks' },
 	{ name: 'Organization', href: '/dashboard/organization', icon: 'fas fa-building' },
     { name: 'Support', href: '/dashboard/support', icon: 'fas fa-life-ring' },
+    { name: 'Security PIN', href: '/dashboard/settings/security', icon: 'fas fa-lock' },
     { name: 'Settings', href: '/dashboard/settings', icon: 'fas fa-cog' },
   ];
 

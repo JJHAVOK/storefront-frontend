@@ -101,7 +101,7 @@ export function StorefrontNotifications() {
            borderRadius: '12px',
            position: 'absolute',
            // --- FIX ALIGNMENT ---
-           right: '-10px', 
+           right: '0', 
            left: 'auto',
            top: '100%',
            marginTop: '15px',
