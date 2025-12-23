@@ -1,4 +1,9 @@
 import Link from "next/link";
+import { getSeoMetadata } from '@/lib/seo';
+
+export async function generateMetadata() {
+  return await getSeoMetadata('/about');
+}
 
 export default function AboutPage() {
   return (

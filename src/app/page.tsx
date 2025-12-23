@@ -1,4 +1,10 @@
 import Link from "next/link";
+import { getSeoMetadata } from '@/lib/seo';
+
+// 👇 Dynamic Metadata Generator
+export async function generateMetadata() {
+  return await getSeoMetadata('/');
+}
 
 export default function Home() {
   return (

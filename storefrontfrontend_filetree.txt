@@ -1,0 +1,120 @@
+.
+├── Dockerfile
+├── eslint.config.mjs
+├── next.config.ts
+├── next-env.d.ts
+├── package.json
+├── package-lock.json
+├── public
+│   ├── assets
+│   │   ├── css
+│   │   │   ├── bootstrap.css
+│   │   │   ├── bootstrap.css.map
+│   │   │   ├── bootstrap-grid.css
+│   │   │   ├── bootstrap-grid.css.map
+│   │   │   ├── bootstrap-grid.min.css
+│   │   │   ├── bootstrap-grid.min.css.map
+│   │   │   ├── bootstrap.min.css
+│   │   │   ├── bootstrap.min.css.map
+│   │   │   ├── bootstrap-reboot.css
+│   │   │   ├── bootstrap-reboot.css.map
+│   │   │   ├── bootstrap-reboot.min.css
+│   │   │   ├── bootstrap-reboot.min.css.map
+│   │   │   └── styles.css
+│   │   ├── img
+│   │   │   ├── bg-image.png
+│   │   │   └── jjphotoimage.png
+│   │   ├── js
+│   │   │   ├── bootstrap.min.js
+│   │   │   ├── jquery.min.js
+│   │   │   ├── main.js
+│   │   │   └── popper.min.js
+│   │   └── scss
+│   │       ├── base
+│   │       │   └── _base.scss
+│   │       ├── components
+│   │       │   ├── _breakpoints.scss
+│   │       │   ├── _header.scss
+│   │       │   ├── _login.scss
+│   │       │   └── _search.scss
+│   │       ├── config
+│   │       │   └── _variables.scss
+│   │       ├── layout
+│   │       │   └── _layout.scss
+│   │       └── styles.scss
+│   ├── file.svg
+│   ├── globe.svg
+│   └── window.svg
+├── README.md
+├── src
+│   ├── app
+│   │   ├── about
+│   │   │   └── page.tsx
+│   │   ├── cart
+│   │   │   └── page.tsx
+│   │   ├── checkout
+│   │   │   └── page.tsx
+│   │   ├── contact
+│   │   │   └── page.tsx
+│   │   ├── dashboard
+│   │   │   ├── layout.tsx
+│   │   │   ├── orders
+│   │   │   │   ├── [id]
+│   │   │   │   │   └── page.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── organization
+│   │   │   │   └── page.tsx
+│   │   │   ├── page.tsx
+│   │   │   ├── projects
+│   │   │   │   └── page.tsx
+│   │   │   ├── settings
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── security
+│   │   │   │       └── page.tsx
+│   │   │   └── support
+│   │   │       ├── [id]
+│   │   │       │   └── page.tsx
+│   │   │       └── page.tsx
+│   │   ├── favicon.ico
+│   │   ├── globals.css
+│   │   ├── knowledge-base
+│   │   │   ├── page.tsx
+│   │   │   └── [slug]
+│   │   │       └── page.tsx
+│   │   ├── layout.tsx
+│   │   ├── login
+│   │   │   └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── profile
+│   │   │   └── [slug]
+│   │   │       └── page.tsx
+│   │   ├── projects
+│   │   │   └── page.tsx
+│   │   ├── register
+│   │   │   └── page.tsx
+│   │   ├── shop
+│   │   │   ├── page.tsx
+│   │   │   └── success
+│   │   │       └── page.tsx
+│   │   └── support
+│   │       ├── page.tsx
+│   │       └── [slug]
+│   │           └── page.tsx
+│   ├── components
+│   │   ├── AuthModal.tsx
+│   │   ├── ChatWidget.tsx
+│   │   ├── Footer.tsx
+│   │   ├── Header.tsx
+│   │   ├── ScrollToTop.tsx
+│   │   ├── StatusModal.tsx
+│   │   ├── StorefrontNotifications.tsx
+│   │   └── Toast.tsx
+│   └── lib
+│       ├── api.ts
+│       ├── authStore.ts
+│       ├── cartStore.ts
+│       └── utils.ts
+├── storefrontfrontend_filetree.txt
+└── tsconfig.json
+
+39 directories, 79 files

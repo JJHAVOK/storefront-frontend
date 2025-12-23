@@ -47,9 +47,15 @@ export function Header() {
     } catch(e) {
        console.error("Logout log failed", e);
     }
+    
+    // FIX: Clear Chat Session on Logout
+    localStorage.removeItem('pf_active_chat_ticket');
+    
     logout();
     setShowDropdown(false);
-    window.location.href = '/';
+    
+    // Force reload to clear React state cleanly
+    window.location.href = '/'; 
   };
 
   const isActive = (path: string) => pathname === path || pathname.startsWith(path + '/') ? 'active' : '';

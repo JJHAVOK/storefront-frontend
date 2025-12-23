@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer"; 
 import { ChatWidget } from '@/components/ChatWidget';
 import { ScrollToTop } from '@/components/ScrollToTop';
+import CookieBanner from '../components/CookieBanner';
 
 export const metadata: Metadata = {
   title: "PixelSolutions | Custom Web Development",
@@ -41,6 +42,7 @@ export default function RootLayout({
         <ChatWidget />
         <Footer />
         <ScrollToTop />
+        <CookieBanner /> {/* 👈 Component Added */}
       </body>
     </html>
   );
