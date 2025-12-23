@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ChatWidget } from '@/components/ChatWidget';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import CookieBanner from '../components/CookieBanner';
+import { SessionGuard } from '@/components/SessionGuard';
 
 export const metadata: Metadata = {
   title: "PixelSolutions | Custom Web Development",
