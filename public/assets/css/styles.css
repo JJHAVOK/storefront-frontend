@@ -2200,3 +2200,28 @@ div[style*="background-color: #f3f3f3"],
 div.breadcrumb-container, section.breadcrumb-container {
     background-color: var(--color-dark-bg) !important;
 }
+
+/* 11. Force Icon Visibility (Cart, Upload, Scroll-to-Top) */
+.header .btn[href="/cart"] i, 
+.fa-shopping-cart, 
+.fa-camera, 
+.fa-upload,
+#scrollToTopBtn i {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: var(--color-white) !important;
+    z-index: 10;
+}
+
+/* Ensure the circular buttons have a proper glass background so the white icon pops */
+.header .btn[href="/cart"] {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Dashboard Profile Upload Button Fix */
+.position-relative .btn-primary.rounded-circle i {
+    color: var(--color-white) !important;
+    font-size: 1.2rem;
+}
