@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // ⚠️ REPLACE WITH YOUR REAL POSTHOG KEY
-    const POSTHOG_KEY = 'phc_w2hRhckHgBtWr4Ns7b225y94Y1cq5kv6Jm7Ucs3xMFn'; 
+    const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY || 'phc_w2hRhckHgBtWr4Ns7b225y94Y1cq5kv6Jm7Ucs3xMFn';
     const POSTHOG_HOST = 'https://us.i.posthog.com'; // or 'https://eu.i.posthog.com'
     
     if (typeof window !== 'undefined' && POSTHOG_KEY) {

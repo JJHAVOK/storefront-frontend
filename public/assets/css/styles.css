@@ -2168,3 +2168,35 @@ div[style*="background-color: #f3f3f3"],
     border-color: rgba(255, 255, 255, 0.2) !important;
     transform: translateY(-5px);
 }
+
+/* 8. Dashboard Settings Tabs Override */
+.nav-tabs {
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+}
+.nav-tabs .nav-link, .nav-tabs .nav-item.show .nav-link {
+    color: var(--color-text) !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+.nav-tabs .nav-link:hover {
+    color: var(--color-white) !important;
+    background-color: rgba(255,255,255,0.05) !important;
+}
+.nav-tabs .nav-link.active {
+    color: var(--color-primary) !important;
+    background-color: rgba(255,255,255,0.08) !important;
+    border-bottom: 2px solid var(--color-primary) !important;
+}
+
+/* 9. Nuke All Inline White Backgrounds & Story Sections */
+[class*="bg-white"], .bg-white, .story-grid, .story-image {
+    background-color: transparent !important;
+}
+.story, .story-projects {
+    background-color: var(--color-dark-bg) !important;
+}
+
+/* 10. Force Breadcrumb Container */
+div.breadcrumb-container, section.breadcrumb-container {
+    background-color: var(--color-dark-bg) !important;
+}
