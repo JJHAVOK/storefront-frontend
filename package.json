@@ -11,6 +11,7 @@
   "dependencies": {
     "@stripe/stripe-js": "^8.5.3",
     "@tabler/icons-react": "^3.35.0",
+    "aos": "^2.3.4",
     "axios": "^1.13.2",
     "next": "16.0.7",
     "posthog-js": "^1.319.2",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/aos": "^3.0.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
