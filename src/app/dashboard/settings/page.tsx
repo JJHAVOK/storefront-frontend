@@ -208,10 +208,10 @@ export default function SettingsPage() {
                     <div className="d-flex align-items-center mb-5">
                         <div className="position-relative me-4">
                             <img src={getAvatarUrl(formData)} className="rounded-circle shadow-sm" width="100" height="100" alt="Profile" style={{ objectFit: 'cover', border: '4px solid #f8f9fa' }} />
-                            <label className="btn btn-primary position-absolute rounded-circle shadow-sm d-flex align-items-center justify-content-center" style={{ width: '35px', height: '35px', bottom: '0', right: '0', border: '2px solid white', cursor: 'pointer' }}>
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                                    <circle cx="12" cy="13" r="4"></circle>
+                            <label className="btn btn-primary position-absolute rounded-circle shadow-sm d-flex align-items-center justify-content-center" style={{ width: '35px', height: '35px', bottom: '0', right: '0', border: '2px solid white', cursor: 'pointer', zIndex: 10 }}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16" style={{ zIndex: 20 }}>
+                                  <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                  <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4H2zm.5 2a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm9 2.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
                                 </svg>
                                 <input type="file" hidden accept="image/*" onChange={handleAvatarUpload} />
                             </label>

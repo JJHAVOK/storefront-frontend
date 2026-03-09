@@ -2,17 +2,13 @@ export function getAvatarUrl(user: { firstName?: string; lastName?: string; avat
   if (user?.avatarUrl) {
       let url = user.avatarUrl;
       
-      // If the backend returns a relative path (e.g., /uploads/avatar-123.png)
-      // Force it to use the full API domain so Next.js doesn't block it
+      // Force it to use the API domain if the backend returns a relative path
       if (url.startsWith('/')) {
           url = `https://api.pixelforgedeveloper.com${url}`;
       }
       
-      // Safe cache-buster
-      const cacheBuster = typeof window !== 'undefined' ? `t=${new Date().getTime()}` : '1';
-      const separator = url.includes('?') ? '&' : '?';
-      
-      return `${url}${separator}${cacheBuster}`;
+      // Removed the cache-buster ?t= so Nginx/CloudPanel doesn't block the file request
+      return url;
   }
   
   const name = `${user?.firstName || ''}+${user?.lastName || ''}`;
