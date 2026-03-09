@@ -2074,48 +2074,52 @@ textarea {
 
 
 /* =========================================================
-   🔥 GLOBAL DARK MODE & GLASSMORPHISM OVERRIDES 🔥
-   This section forces all leftover white/light elements 
-   (Modals, Dashboard, About, Projects) into the SaaS Dark Theme.
+   🔥 V2 ENHANCED: GLOBAL DARK MODE & GLASSMORPHISM OVERRIDES 🔥
+   Targets Dashboard, About Us, Cart, Modals, and Inline React Styles
    ========================================================= */
 
-/* 1. Layout Separators (Top Bar, Breadcrumb, Footer) */
-.top-bar {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-.main-footer {
-    background-color: #030303 !important; /* Slightly darker to separate from body */
-    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-.breadcrumb-container {
-    background-color: var(--color-dark-bg) !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-.breadcrumb a, .breadcrumb span { color: var(--color-text) !important; }
+/* 1. Layout Separators (Top Bar, Breadcrumb, Footer, About Us Sections) */
+.top-bar { border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important; }
+.main-footer { background-color: #030303 !important; border-top: 1px solid rgba(255, 255, 255, 0.08) !important; }
+.breadcrumb-container { background-color: #0a0a0c !important; border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important; }
+.breadcrumb a, .breadcrumb span, .breadcrumb { color: var(--color-text) !important; }
 
-/* 2. Header Buttons (Fixing Cart, Help, and Auth inline styles) */
-.header .btn-outline-secondary,
-.header .btn[href="/cart"], 
-.header .btn[href="/knowledge-base"],
-.header .dropdown-toggle {
+/* Force separation borders on About Us / Info pages */
+.story, .values, .team, .story-projects {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding-top: 80px !important; padding-bottom: 80px !important;
+}
+.values { background-color: #0d0d0f !important; } /* Alternate dark shade for separation */
+
+/* 2. Header & Icons (Cart, Scroll to Top) */
+.header .btn-outline-secondary, .header .btn[href="/cart"], .header .dropdown-toggle {
     background-color: rgba(255, 255, 255, 0.05) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
     color: var(--color-white) !important;
 }
-.header .btn i {
-    color: var(--color-white) !important;
+.header .btn i, .header .btn-outline-secondary i, .header .dropdown-toggle i, #scrollToTopBtn i { 
+    color: var(--color-white) !important; 
+}
+#scrollToTopBtn { 
+    background-color: rgba(255,255,255,0.1) !important; 
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    backdrop-filter: blur(10px); 
 }
 
-/* 3. Global Background Overrides (About, Projects, 404, Dashboard) */
-.story, .values, .story-projects, .projects-catalogue, .body-404, .contact-main, body {
+/* 3. Global Backgrounds & Text Resets */
+body, main, .projects-catalogue, .body-404, .contact-main {
     background-color: var(--color-dark-bg) !important;
 }
-.bg-white, .bg-light { 
-    background-color: transparent !important; 
+p, .lead-paragraph, .text-muted, span.text-muted, .breadcrumb, .accordion-panel p { 
+    color: var(--color-text) !important; 
 }
+h1, h2, h3, h4, h5, h6, .text-dark, .fs-5, .fs-4, .fw-bold { 
+    color: var(--color-white) !important; 
+}
+.bg-white, .bg-light { background-color: transparent !important; }
 
-/* 4. Convert all remaining White Cards & Modals into Glass Panels */
-.projects-sidebar, .project-card, .error-container, .story-accordion, .accordion-panel, .contact-form-section, .info-block, .modal-content, .dropdown-menu, .login__form, .search-box {
+/* 4. The "Everything Card" Nuke (Dashboard, Cart, About Boxes) */
+.card, .projects-sidebar, .project-card, .error-container, .story-accordion, .contact-form-section, .info-block, .modal-content, .dropdown-menu, .login__form, .search-box {
     background-color: rgba(255, 255, 255, 0.03) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
@@ -2125,16 +2129,37 @@ textarea {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* 5. Fix Text Colors inside the new Glass Panels */
-.projects-sidebar h3, .project-card h3, .error-container h1, .accordion-header h3, .text-dark, .modal-content h2, .modal-content h3, .modal-content h4, .dropdown-item, .login__title, .login__label {
+/* Sub-elements inside Cards (Headers, Bodies, Lists) */
+.card-body, .card-header, .list-group-item, .accordion-panel {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
     color: var(--color-white) !important;
 }
-.accordion-header[aria-expanded="true"] h3 {
-    color: var(--color-primary) !important;
-}
-.text-muted { color: #888 !important; }
+.card-header { border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
+hr, .dropdown-divider { border-color: rgba(255,255,255,0.1) !important; }
 
-/* 6. Fix Hover States for Dropdowns and Project Cards */
+/* 5. Inputs & Inline React Styles (Shop Search, Selects) */
+input, textarea, select, .login__input, .form-control, .form-select, .input-group {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: var(--color-white) !important;
+}
+/* Aggressive override for React inline styles (e.g. style="background-color: rgb(243, 243, 243)") */
+div[style*="background-color: rgb(243, 243, 243)"], 
+div[style*="background-color: #f3f3f3"],
+.input-group-text {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+/* 6. Projects Page Sidebar Filters */
+.projects-sidebar label, .filter-group label, .filter-group h4 { 
+    color: #cccccc !important; 
+    font-weight: 500;
+}
+.projects-sidebar label:hover { color: var(--color-primary) !important; }
+
+/* 7. Fix Hover States for Dropdowns and Project Cards */
 .dropdown-item:hover, .list-group-item:hover, .project-card:hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
     color: var(--color-white) !important;
@@ -2142,11 +2167,4 @@ textarea {
 .project-card:hover {
     border-color: rgba(255, 255, 255, 0.2) !important;
     transform: translateY(-5px);
-}
-
-/* 7. Inputs inside forms/modals */
-input, textarea, select, .login__input {
-    background-color: rgba(0, 0, 0, 0.2) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: var(--color-white) !important;
 }
