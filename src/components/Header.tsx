@@ -74,10 +74,10 @@ export function Header() {
       <div className="top-bar">
         <div className="container">
             <div className="top-bar-left">
-                <a href="tel:0000000000"><i className="fas fa-phone-alt"></i> 000 000 0000</a>
+                <a href="tel:404 664 9654"><i className="fas fa-phone-alt"></i> 404 664 9654</a>
             </div>
             <div className="top-bar-center">
-                <a href="mailto:emailus@jeemail.com"><i className="fas fa-envelope"></i> emailus@jeemail.com</a>
+                <a href="mailto:support@pixelforgedeveloper.com"><i className="fas fa-envelope"></i> support@pixelforgedeveloper.com</a>
             </div>
             <div className="top-bar-right"></div>
         </div>
@@ -90,11 +90,10 @@ export function Header() {
               <nav className="nav-column d-none d-lg-block">
                   <div className="nav-main-links">
                       <Link href="/" className={isActive('/')}>Home</Link>
-                      <Link href="/shop" className={isActive('/shop')}>Shop</Link>
-                      <Link href="/blog" className={isActive('/blog')}>Blog</Link>
-                      <Link href="/projects" className={isActive('/projects')}>Projects</Link>
                       <Link href="/about" className={isActive('/about')}>About Us</Link>
-                      {/* Contact restored below */}
+                      <Link href="/shop" className={isActive('/shop')}>Shop</Link>
+                      <Link href="/projects" className={isActive('/projects')}>Projects</Link>
+                    <Link href="/blog" className={isActive('/blog')}>Updates</Link>
                       <Link href="/contact" className={isActive('/contact')}>Contact</Link>
                   </div>
               </nav>

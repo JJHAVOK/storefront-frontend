@@ -30,7 +30,8 @@ function ConfirmationModal({ show, title, message, confirmLabel, confirmColor = 
 }
 
 export default function SettingsPage() {
-  const { user, token, login, logout } = useAuthStore();
+  // [FIX] Removed 'token' from destructuring
+  const { user, login, logout } = useAuthStore();
   const router = useRouter();
   
   const [activeTab, setActiveTab] = useState('profile');
@@ -88,9 +89,10 @@ export default function SettingsPage() {
         const profileRes = await api.patch('/customer/auth/profile', { ...formData, avatarUrl: newAvatarUrl });
 
         setFormData(prev => ({ ...prev, avatarUrl: newAvatarUrl }));
-        if (profileRes.data.user && token) {
-           login(token, profileRes.data.user);
-           router.refresh();
+        if (profileRes.data.user) {
+            // [FIX] Pass only user object
+            login(profileRes.data.user); 
+            router.refresh();
         }
         showStatus('Success', 'Avatar updated successfully!');
     } catch (error: any) { showStatus('Error', 'Avatar upload failed.', 'error'); } finally { setLoading(false); }
@@ -101,7 +103,8 @@ export default function SettingsPage() {
     setLoading(true);
     try {
       const res = await api.patch('/customer/auth/profile', formData);
-      if (res.data.user && token) login(token, res.data.user);
+      // [FIX] Check for user, pass only user
+      if (res.data.user) login(res.data.user);
       showStatus('Saved', 'Profile updated successfully.');
     } catch (error: any) { showStatus('Error', error.response?.data?.message || 'Failed to update profile.', 'error'); } finally { setLoading(false); }
   };
@@ -140,7 +143,8 @@ export default function SettingsPage() {
           const existingMeta = (user as any)?.metadata || {};
           const newMeta = { ...existingMeta, notifications: notifs };
           const res = await api.patch('/customer/auth/profile', { metadata: newMeta });
-          if (res.data.user && token) login(token, res.data.user);
+          // [FIX] Check for user, pass only user
+          if (res.data.user) login(res.data.user);
           showStatus('Saved', 'Preferences saved.');
       } catch (e) { showStatus('Error', 'Failed to save preferences.', 'error'); } 
       finally { setLoading(false); }
@@ -295,16 +299,16 @@ export default function SettingsPage() {
               {/* NOTIFICATIONS TAB */}
               {activeTab === 'notifications' && (
                   <div>
-                     <h5 className="fw-bold mb-3">Email Preferences</h5>
-                     {Object.keys(notifs).map(key => (
-                        <div className="form-check form-switch mb-3" key={key}>
+                      <h5 className="fw-bold mb-3">Email Preferences</h5>
+                      {Object.keys(notifs).map(key => (
+                         <div className="form-check form-switch mb-3" key={key}>
                             <input className="form-check-input" type="checkbox" id={`notif-${key}`} checked={(notifs as any)[key]} onChange={e => setNotifs({...notifs, [key]: e.target.checked})} />
                             <label className="form-check-label text-capitalize" htmlFor={`notif-${key}`}>{key} Updates</label>
-                        </div>
-                     ))}
-                     <button className="btn btn-primary mt-3" onClick={handleSaveNotifs} disabled={loading}>
-                        {loading ? 'Saving...' : 'Save Preferences'}
-                     </button>
+                         </div>
+                      ))}
+                      <button className="btn btn-primary mt-3" onClick={handleSaveNotifs} disabled={loading}>
+                         {loading ? 'Saving...' : 'Save Preferences'}
+                      </button>
                   </div>
               )}
 

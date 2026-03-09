@@ -8,7 +8,8 @@ import { IconMessageChatbot, IconX, IconSend, IconPaperclip, IconLoader, IconChe
 import Link from 'next/link';
 
 export function ChatWidget() {
-  const { user, token } = useAuthStore() || {}; 
+  // [FIX] Removed 'token' from destructuring
+  const { user } = useAuthStore() || {}; 
   
   // UI State
   const [isOpen, setIsOpen] = useState(false);
@@ -106,8 +107,9 @@ export function ChatWidget() {
   const connectSocket = (tid: string) => {
       if (!tid) return;
       
+      // [FIX] Use Cookie Auth (withCredentials) instead of manual token
       const s = io('https://api.pixelforgedeveloper.com/chat', { 
-          auth: { token: token ? `Bearer ${token}` : undefined },
+          withCredentials: true, // <--- CRITICAL
           transports: ['websocket'] 
       });
 
@@ -132,7 +134,6 @@ export function ChatWidget() {
           setResolutionPrompt(true);
       });
 
-      // --- NEW: Handle Close Signal ---
       s.on('ticket_closed', () => {
           handleDeadTicket();
       });
@@ -207,16 +208,15 @@ export function ChatWidget() {
       e.preventDefault(); setLoading(true); setError('');
       try {
           const finalSubject = `[${issueType}] ${subject}`;
-          const headers: any = { 'Content-Type': 'application/json' };
-          if (token) headers['Authorization'] = `Bearer ${token}`;
-
-          const res = await fetch('https://api.pixelforgedeveloper.com/customer/portal/tickets', {
-              method: 'POST', headers,
-              body: JSON.stringify({ email, subject: finalSubject, message: description })
+          
+          // [FIX] Use 'api' instance (Axios) instead of fetch to handle cookies automatically
+          const res = await api.post('/customer/portal/tickets', { 
+              email, 
+              subject: finalSubject, 
+              message: description 
           });
           
-          if (!res.ok) throw new Error('Failed to create ticket');
-          const data = await res.json();
+          const data = res.data;
           const newId = data.id || data.data?.id;
 
           if(newId) {
@@ -229,7 +229,10 @@ export function ChatWidget() {
              connectSocket(newId);
              setLoading(false);
           } else { throw new Error('No ID returned'); }
-      } catch(e: any) { setLoading(false); setError(e.message || 'Failed to start chat.'); }
+      } catch(e: any) { 
+          setLoading(false); 
+          setError(e.response?.data?.message || e.message || 'Failed to start chat.'); 
+      }
   };
 
   const handlePinSubmit = () => { 
@@ -241,8 +244,8 @@ export function ChatWidget() {
   const handleResolutionResponse = (isResolved: boolean) => {
       setResolutionPrompt(false);
       const text = isResolved 
-         ? "Yes, you can close this ticket. Everything is good! 👍" 
-         : "No, I still have questions. Please keep it open.";
+          ? "Yes, you can close this ticket. Everything is good! 👍" 
+          : "No, I still have questions. Please keep it open.";
       
       if (socket && socket.connected) {
           socket.emit('send_message', { ticketId: activeTicket || ticketId, content: text });
@@ -260,9 +263,8 @@ export function ChatWidget() {
         if (socket && socket.connected) {
             socket.emit('send_message', { ticketId: tid, content: input });
         } else {
-            const headers: any = { 'Content-Type': 'application/json' };
-            if (token) headers['Authorization'] = `Bearer ${token}`;
-            await api.post('/chat/messages', { ticketId: tid, content: input }, { headers });
+            // [FIX] Use api.post directly (Cookies handled automatically)
+            await api.post('/chat/messages', { ticketId: tid, content: input });
         }
         setInput('');
     }

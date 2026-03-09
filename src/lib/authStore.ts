@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import api from './api';
+// We do NOT import api here to avoid circular dependencies.
+// The API interceptor handles the logic on its own.
 
 interface User {
   id: string;
@@ -16,27 +17,33 @@ interface User {
 
 interface AuthState {
   user: User | null;
-  token: string | null;
-  login: (token: string, user: User) => void;
+  // Token removed from interface (Cookie handles it)
+  login: (user: User) => void;
   logout: () => void;
+  isAuthenticated: () => boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
-      token: null,
-      login: (token, user) => {
-        localStorage.setItem('customer_token', token);
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        set({ token, user });
+
+      login: (user) => {
+        // We no longer touch localStorage or API headers manually.
+        // The browser has already received the Set-Cookie header from the login response.
+        set({ user });
       },
+
       logout: () => {
-        localStorage.removeItem('customer_token');
-        delete api.defaults.headers.common['Authorization'];
-        set({ token: null, user: null });
+        // We only clear the client-side user data.
+        // The API call to /auth/logout (handled in the component) kills the cookie.
+        set({ user: null });
       },
+
+      isAuthenticated: () => !!get().user,
     }),
-    { name: 'customer-storage' }
+    {
+      name: 'customer-storage', // Persists only the User Profile
+    }
   )
 );

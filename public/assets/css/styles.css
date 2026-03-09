@@ -1,21 +1,22 @@
-/* --- 0. Global Reset and Variables (Professional Palette) --- */
+/* --- 0. Global Reset and Variables (2026 SaaS Dark Mode) --- */
 :root {
-    /* Main Color: Deep Blue/Cyan (Trust, Tech, Professionalism) */
-    --color-primary: #0077b6;      /* Main Blue: 0077b6 */
-    --color-primary-dark: #005f90; /* Darker Blue for hover */
-    --color-accent: #fca311;       /* Amber/Gold for strong highlight/CTA */
+    /* Main Color: High-Tech Cyan & Emerald */
+    --color-primary: #0ea5e9;      /* Bright Cyan */
+    --color-primary-dark: #0284c7; 
+    --color-accent: #10b981;       /* Acid Green for strong highlight/CTA */
     
     /* Backgrounds & Text */
-    --color-dark-bg: #14213d;      /* Dark Navy/Charcoal for contrast sections */
-    --color-text: #333333;         /* Near Black for body text */
-    --color-light-bg: #f8f9fa;     /* Light Gray/Off-White */
+    --color-dark-bg: #09090b;      /* Deep Charcoal/Almost Black */
+    --color-text: #a1a1aa;         /* Soft gray for readable body text */
+    --color-light-bg: #18181b;     /* Slightly lighter charcoal for contrast */
     --color-white: #ffffff;
     
-    /* Font (Inter: Modern, highly readable) */
+    /* Fonts: Added JetBrains Mono for a 'Developer' feel on tags */
     --font-family: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
     --font-weight-regular: 400;
-    --font-weight-medium: 600;
-    --font-weight-bold: 800;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
 }
 
 * {
@@ -24,20 +25,18 @@
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--font-family);
     line-height: 1.6;
     color: var(--color-text);
-    background-color: var(--color-white);
+    background-color: var(--color-dark-bg); /* Switched to dark background */
 }
 
 h1, h2, h3 {
     line-height: 1.2;
-    color: var(--color-dark-bg);
+    color: var(--color-white); /* Switched headings to white */
 }
 
 .section-title {
@@ -57,6 +56,27 @@ h1, h2, h3 {
     margin: 15px auto 0;
     border-radius: 2px;
 }
+
+/* 🟢 THE GLASSMORPHISM UTILITY 🟢 */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+    color: var(--color-text) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
+}
+
+.glass-panel h3 { color: var(--color-white) !important; }
 
 
 /* --- Utility Classes --- */
@@ -114,7 +134,8 @@ h1, h2, h3 {
 }
 /* --- 1. Header & Navigation (Improved Z-index and Structure) --- */
 .header {
-    background-color: var(--color-white);
+    background-color: rgba(9, 9, 11, 0.8)
+    backdrop-filter: blur(15px);
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;

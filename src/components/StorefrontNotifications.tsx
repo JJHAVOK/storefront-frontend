@@ -6,7 +6,8 @@ import { useAuthStore } from '@/lib/authStore';
 import { io } from 'socket.io-client';
 
 export function StorefrontNotifications() {
-  const { token } = useAuthStore();
+  // [FIX] Removed 'token'
+  const { user } = useAuthStore();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -14,24 +15,34 @@ export function StorefrontNotifications() {
   const unreadCount = notifications.filter(n => !n.readAt).length;
 
   const fetchNotifs = () => {
+    // API client already handles cookies automatically
     api.get('/notifications').then(res => setNotifications(res.data)).catch(()=>{});
   };
 
   useEffect(() => { 
+      // Only run if logged in
+      if (!user) return;
+
       fetchNotifs();
       const interval = setInterval(fetchNotifs, 15000); 
 
       let socket: any;
-      if (token) {
-          socket = io('https://api.pixelforgedeveloper.com', {
-              auth: { token: `Bearer ${token}` },
-              transports: ['websocket'],
-              reconnection: true
-          });
-          socket.on('notification', (newNotif: any) => {
-              setNotifications(prev => [newNotif, ...prev]);
-          });
-      }
+      
+      // [FIX] Initialize socket without token, using cookies
+      socket = io('https://api.pixelforgedeveloper.com', {
+          withCredentials: true, // <--- CRITICAL for Cookie Auth
+          transports: ['websocket'],
+          reconnection: true
+      });
+      
+      socket.on('connect', () => {
+          // Optional: Join user room if needed by your backend logic
+          // socket.emit('join_user', user.id); 
+      });
+
+      socket.on('notification', (newNotif: any) => {
+          setNotifications(prev => [newNotif, ...prev]);
+      });
 
       function handleClickOutside(event: MouseEvent) {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -45,7 +56,7 @@ export function StorefrontNotifications() {
           clearInterval(interval);
           document.removeEventListener("mousedown", handleClickOutside);
       };
-  }, [token]);
+  }, [user]); // [FIX] Removed 'token' dependency
 
   const handleMarkRead = async (id: string, e: React.MouseEvent) => {
       e.stopPropagation();
@@ -55,19 +66,18 @@ export function StorefrontNotifications() {
       } catch(e) {}
   };
 
-  // --- NEW: Mark All Read ---
   const handleMarkAllRead = async (e: React.MouseEvent) => {
       e.stopPropagation();
       try {
-          // We iterate or use a bulk endpoint if available. Iterating is fine for now.
           const unread = notifications.filter(n => !n.readAt);
           for (const n of unread) {
               await api.patch(`/notifications/${n.id}/read`);
           }
-          // Update UI immediately
           setNotifications(prev => prev.map(n => ({ ...n, readAt: new Date() })));
       } catch(e) {}
   };
+
+  if (!user) return null; // Hide if not logged in
 
   return (
     <div ref={dropdownRef} className="position-relative d-inline-block" style={{ marginRight: '20px' }}>
@@ -100,7 +110,6 @@ export function StorefrontNotifications() {
            border: '1px solid rgba(0,0,0,0.1)',
            borderRadius: '12px',
            position: 'absolute',
-           // --- FIX ALIGNMENT ---
            right: '0', 
            left: 'auto',
            top: '100%',

@@ -2,13 +2,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import api from '@/lib/api';
-import { useAuthStore } from '@/lib/authStore';
+// We don't need useAuthStore for token anymore
 import { io, Socket } from 'socket.io-client';
 import Link from 'next/link';
 
 export default function SupportDetail() {
   const { id } = useParams();
-  const { token } = useAuthStore();
+  
+  // [FIX] Removed 'token' from AuthStore.
+  // We don't need it because the Cookie handles authentication now.
+  
   const [ticket, setTicket] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState('');
@@ -21,8 +24,7 @@ export default function SupportDetail() {
           const t = res.data.find((x: any) => x.id === id);
           if (t) {
               setTicket(t);
-              // Load full details (messages) via specific endpoint if created, otherwise rely on list data or create a specific endpoint
-              // Ideally: GET /customer/portal/tickets/:id
+              // Load full details (messages)
               api.get(`/customer/portal/tickets/${id}`).then(d => setMessages(d.data.messages || []));
           }
       });
@@ -30,8 +32,13 @@ export default function SupportDetail() {
 
   // Socket Connection
   useEffect(() => {
-      if (!token || !id) return;
-      const newSocket = io('https://api.pixelforgedeveloper.com/chat', { auth: { token: `Bearer ${token}` } });
+      if (!id) return;
+      
+      // [FIX] Updated Socket Connection for Cookie Auth
+      const newSocket = io('https://api.pixelforgedeveloper.com/chat', { 
+          withCredentials: true, // <--- CRITICAL: Sends the HttpOnly Cookie
+          transports: ['websocket'], // Enforce websocket transport
+      });
       
       newSocket.on('connect', () => {
           newSocket.emit('join_ticket', id);
@@ -43,8 +50,12 @@ export default function SupportDetail() {
       });
 
       setSocket(newSocket);
-      return () => { newSocket.disconnect(); }
-  }, [token, id]);
+      
+      // Cleanup
+      return () => { 
+          if(newSocket) newSocket.disconnect(); 
+      }
+  }, [id]); // Removed 'token' dependency
 
   const scrollToBottom = () => setTimeout(() => scrollRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
 

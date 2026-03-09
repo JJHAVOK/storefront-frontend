@@ -22,6 +22,8 @@ export function AuthModal({ mode, onSwitch, onClose, preventRedirect = false }: 
     firstName: '',
     lastName: ''
   });
+  
+  // MFA State
   const [mfaCode, setMfaCode] = useState('');
   const [mfaRequired, setMfaRequired] = useState(false);
 
@@ -69,12 +71,25 @@ export function AuthModal({ mode, onSwitch, onClose, preventRedirect = false }: 
 
     try {
       if (mode === 'login') {
-        const payload = { ...formData, code: mfaRequired ? mfaCode : undefined };
+        // Prepare Payload
+        const payload: any = { 
+            email: formData.email, 
+            password: formData.password 
+        };
+        
+        // [FIX] Add code if MFA was requested
+        if (mfaRequired) {
+            payload.code = mfaCode;
+        }
+
         const res = await api.post('/customer/auth/login', payload);
         
-        login(res.data.access_token, res.data.user);
+        // [FIX] Pass only user (Cookie handled automatically)
+        login(res.data.user);
+        
         onClose(); 
         if (!preventRedirect) router.push('/dashboard'); 
+
       } else {
         // REGISTER
         await api.post('/customer/auth/register', {
@@ -86,28 +101,29 @@ export function AuthModal({ mode, onSwitch, onClose, preventRedirect = false }: 
         
         setIsSuccess(true);
         
-        // Auto-Login Logic
+        // Auto-Login after Register
         setTimeout(async () => {
            try {
               const res = await api.post('/customer/auth/login', { 
                 email: formData.email, 
                 password: formData.password 
               });
-              login(res.data.access_token, res.data.user);
+              login(res.data.user);
               onClose();
               if (!preventRedirect) router.push('/dashboard');
            } catch(e) {
               setIsSuccess(false);
-              onSwitch(); // Switch to login form
+              onSwitch(); // Switch to login form if auto-login fails
            }
         }, 2000);
       }
     } catch (err: any) {
-      if (err.response?.data?.message === 'MFA_REQUIRED') {
+      // [CRITICAL FIX] Handle MFA Challenge
+      if (err.response?.data?.message === 'MFA_REQUIRED' || err.response?.status === 403) {
          setMfaRequired(true);
          setError('');
          setLoading(false);
-         return;
+         return; // Stop here, UI updates to show PIN input
       }
 
       console.error('AUTH ERROR:', err);
@@ -210,6 +226,10 @@ export function AuthModal({ mode, onSwitch, onClose, preventRedirect = false }: 
                  </>
               ) : (
                  <div className="mb-3 text-center">
+                    <div className="alert alert-info py-2 small mb-3">
+                        <i className="fas fa-shield-alt me-2"></i>
+                        Security check required.
+                    </div>
                     <p className="text-muted mb-3">Enter the 6-digit code from your authenticator app.</p>
                     <input 
                        type="text" 
@@ -226,7 +246,7 @@ export function AuthModal({ mode, onSwitch, onClose, preventRedirect = false }: 
 
               <div className="d-grid gap-2">
                 <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
-                  {loading ? 'Processing...' : (mfaRequired ? 'Verify' : (mode === 'login' ? 'Sign In' : 'Register'))}
+                  {loading ? 'Processing...' : (mfaRequired ? 'Verify & Login' : (mode === 'login' ? 'Sign In' : 'Register'))}
                 </button>
               </div>
             </form>
@@ -236,6 +256,14 @@ export function AuthModal({ mode, onSwitch, onClose, preventRedirect = false }: 
               <div className="modal-footer justify-content-center bg-light border-0">
                 <button className="btn btn-link text-decoration-none" onClick={onSwitch}>
                   {mode === 'login' ? "Don't have an account? Sign Up" : "Already have an account? Login"}
+                </button>
+              </div>
+          )}
+          
+          {mfaRequired && (
+              <div className="modal-footer justify-content-center bg-light border-0">
+                <button className="btn btn-link text-decoration-none text-muted" onClick={() => setMfaRequired(false)}>
+                  Cancel Verification
                 </button>
               </div>
           )}

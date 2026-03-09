@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link'; 
 import api from '@/lib/api';
 import { useCartStore } from '@/lib/cartStore';
-import { StatusModal } from '@/components/StatusModal'; // <-- Use Standard Modal
-
+import { StatusModal } from '@/components/StatusModal';
+// 1. Import PostHog hook
+import { usePostHog } from 'posthog-js/react';
 
 export default function ShopPage() {
   const [products, setProducts] = useState<any[]>([]);
@@ -16,8 +18,10 @@ export default function ShopPage() {
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
-  // --- NEW STANDARD STATUS MODAL STATE ---
   const [status, setStatus] = useState({ show: false, title: '', message: '', type: 'success' as 'success' | 'error' });
+  
+  // 2. Initialize Hook
+  const posthog = usePostHog();
 
   useEffect(() => {
     api.get('/ecommerce/products')
@@ -40,7 +44,15 @@ export default function ShopPage() {
   const handleAddToCart = (product: any) => {
       addItem({ id: product.id, name: product.name, price: product.price, quantity: 1 });
       
-      // --- USE STANDARD MODAL ---
+      // 3. TRACK EVENT
+      if (posthog) {
+        posthog.capture('add_to_cart', { 
+            product_id: product.id, 
+            product_name: product.name, 
+            price: product.price 
+        });
+      }
+      
       setStatus({ 
           show: true, 
           title: 'Added to Cart', 
@@ -55,21 +67,20 @@ export default function ShopPage() {
 
   return (
     <main>
-      {/* --- STANDARD STATUS MODAL --- */}
       <StatusModal 
-         show={status.show} 
-         title={status.title} 
-         message={status.message} 
-         type={status.type} 
-         onClose={() => setStatus({ ...status, show: false })} 
+          show={status.show} 
+          title={status.title} 
+          message={status.message} 
+          type={status.type} 
+          onClose={() => setStatus({ ...status, show: false })} 
       />
 
       <header className="bg-dark" style={{ marginTop: '56px', height: '200px', display: 'flex', alignItems: 'center' }}>
         <div className="container px-4 px-lg-5">
-             <div className="text-center text-white">
-                 <h1 className="display-6 fw-bold text-uppercase m-0">Shop Solutions</h1>
-                 <p className="lead fw-normal text-white-50 mb-0 small">Enterprise Modules & Plugins</p>
-             </div>
+              <div className="text-center text-white">
+                  <h1 className="display-6 fw-bold text-uppercase m-0">Shop Solutions</h1>
+                  <p className="lead fw-normal text-white-50 mb-0 small">Enterprise Modules & Plugins</p>
+              </div>
          </div>
       </header>
 
@@ -81,7 +92,8 @@ export default function ShopPage() {
                  <div className="modal-header border-0">
                     <button type="button" className="btn-close" onClick={() => setSelectedProduct(null)}></button>
                  </div>
-                 <div className="modal-body pb-5 px-5">
+                 
+                 <div className="modal-body pb-0 px-5">
                     <div className="row">
                        <div className="col-md-6 mb-4 mb-md-0">
                            <div className="bg-light rounded-3 d-flex align-items-center justify-content-center" style={{ height: '300px' }}>
@@ -99,97 +111,64 @@ export default function ShopPage() {
                                <li><i className="fas fa-check text-success me-2"></i> Enterprise License</li>
                                <li><i className="fas fa-check text-success me-2"></i> 24/7 Support</li>
                            </ul>
+                           
                            <button 
-                              className="btn btn-primary btn-lg w-100 rounded-pill" 
-                              onClick={() => handleAddToCart(selectedProduct)}
+                             className="btn btn-primary btn-lg w-100 rounded-pill" 
+                             onClick={() => handleAddToCart(selectedProduct)}
                            >
-                              Add to Cart
+                             Add to Cart
                            </button>
                        </div>
                     </div>
                  </div>
+
+                 <div className="modal-footer border-0 px-5 pb-4 pt-3">
+                    <Link 
+                        href={`/product/${selectedProduct.id}`} 
+                        className="btn btn-outline-dark rounded-pill"
+                        // 4. Track View Full Page Click
+                        onClick={() => posthog?.capture('view_product_detail_click', { product_id: selectedProduct.id })}
+                    >
+                        View Full Details <i className="fas fa-arrow-right ms-2"></i>
+                    </Link>
+                 </div>
+
               </div>
            </div>
         </div>
       )}
 
+      {/* --- GRID --- */}
       <section className="page-section pt-5 bg-light">
         <div className="container">
-          
-          {/* --- PRO CONTROL BAR --- */}
           <div className="card border-0 shadow-sm mb-5 rounded-3 overflow-hidden" style={{ transform: 'translateY(-50px)' }}>
              <div className="card-body p-4 bg-white">
                 <div className="row g-3 align-items-center">
                     <div className="col-md-6">
-                        <div 
-                           className="input-group input-group-lg border-0 rounded-3 overflow-hidden shadow-none"
-                           style={{ backgroundColor: '#f3f3f3' }}
-                        >
-                           <span className="input-group-text border-0 ps-4" style={{ backgroundColor: 'transparent', marginRight: '3px' }}>
-                               <i className="fas fa-search text-muted"></i>
-                           </span>
-                           <input 
-                              type="text" 
-                              className="form-control border-0 shadow-none ps-0" 
-                              placeholder="Search products..." 
-                              value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
-                              style={{ fontSize: '1rem', backgroundColor: 'transparent' }}
-                           />
+                        <div className="input-group input-group-lg border-0 rounded-3 overflow-hidden shadow-none" style={{ backgroundColor: '#f3f3f3' }}>
+                           <span className="input-group-text border-0 ps-4" style={{ backgroundColor: 'transparent', marginRight: '3px' }}><i className="fas fa-search text-muted"></i></span>
+                           <input type="text" className="form-control border-0 shadow-none ps-0" placeholder="Search products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ fontSize: '1rem', backgroundColor: 'transparent' }} />
                         </div>
                     </div>
-
                     <div className="col-md-3">
                        <div className="position-relative rounded-3 shadow-none" style={{ backgroundColor: '#f3f3f3' }}>
-                           <select 
-                              className="form-select form-select-lg border-0 w-100 shadow-none"
-                              style={{ 
-                                  fontSize: '0.95rem', 
-                                  fontWeight: '500', 
-                                  color: '#495057',
-                                  backgroundColor: 'transparent',
-                                  appearance: 'none', 
-                                  WebkitAppearance: 'none',
-                                  paddingLeft: '1.5rem',
-                                  paddingRight: '2.5rem',
-                                  cursor: 'pointer',
-                                  height: '48px'
-                              }}
-                              value={typeFilter}
-                              onChange={(e) => setTypeFilter(e.target.value)}
-                           >
-                              <option value="ALL">All Categories</option>
-                              <option value="PHYSICAL">Physical Goods</option>
-                              <option value="SERVICE">Services</option>
-                              <option value="DIGITAL">Digital Assets</option>
-                              <option value="CUSTOM">Custom Orders</option>
+                           <select className="form-select form-select-lg border-0 w-100 shadow-none" style={{ fontSize: '0.95rem', fontWeight: '500', color: '#495057', backgroundColor: 'transparent', appearance: 'none', paddingLeft: '1.5rem', paddingRight: '2.5rem', cursor: 'pointer', height: '48px' }} value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+                             <option value="ALL">All Categories</option>
+                             <option value="PHYSICAL">Physical Goods</option>
+                             <option value="SERVICE">Services</option>
+                             <option value="DIGITAL">Digital Assets</option>
+                             <option value="CUSTOM">Custom Orders</option>
                            </select>
-                           
-                           <div 
-                                className="position-absolute top-50 end-0 translate-middle-y me-3"
-                                style={{ pointerEvents: 'none' }}
-                           >
-                              <i className="fas fa-chevron-down text-muted small"></i>
-                           </div>
+                           <div className="position-absolute top-50 end-0 translate-middle-y me-3" style={{ pointerEvents: 'none' }}><i className="fas fa-chevron-down text-muted small"></i></div>
                        </div>
                     </div>
-                    
-                    <div className="col-md-3 text-md-end text-muted small fw-bold">
-                       {filteredProducts.length} Results Found
-                    </div>
+                    <div className="col-md-3 text-md-end text-muted small fw-bold">{filteredProducts.length} Results Found</div>
                 </div>
              </div>
           </div>
 
-          {/* --- PRODUCT GRID --- */}
           <div className="row gx-4 gy-5">
-            {filteredProducts.length === 0 && (
-               <div className="col-12 text-center text-muted py-5">
-                  <i className="fas fa-search fa-3x mb-3 text-secondary opacity-25"></i>
-                  <h4>No products found.</h4>
-               </div>
-            )}
-
+            {filteredProducts.length === 0 && <div className="col-12 text-center text-muted py-5"><i className="fas fa-search fa-3x mb-3 text-secondary opacity-25"></i><h4>No products found.</h4></div>}
             {filteredProducts.map((product) => (
               <div className="col-lg-4 col-md-6 mb-5" key={product.id}>
                 <div className="card h-100 border-0 shadow-hover transition-all rounded-4 overflow-hidden" style={{ cursor: 'pointer' }} onClick={() => setSelectedProduct(product)}>
@@ -206,12 +185,7 @@ export default function ShopPage() {
                     <p className="card-text text-muted small line-clamp-2">{product.description}</p>
                   </div>
                   <div className="card-footer p-4 pt-0 border-0 bg-white">
-                     <button 
-                        className="btn btn-outline-primary w-100 rounded-pill fw-bold"
-                        onClick={(e) => { e.stopPropagation(); handleAddToCart(product); }}
-                     >
-                        Add to Cart
-                     </button>
+                     <button className="btn btn-outline-primary w-100 rounded-pill fw-bold" onClick={(e) => { e.stopPropagation(); handleAddToCart(product); }}>Add to Cart</button>
                   </div>
                 </div>
               </div>

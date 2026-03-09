@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/Header"; 
-import { Footer } from "@/components/Footer"; 
-import { ChatWidget } from '@/components/ChatWidget';
+// [FIX] Removed direct Header/Footer/Chat imports from here
 import { ScrollToTop } from '@/components/ScrollToTop';
 import CookieBanner from '../components/CookieBanner';
+import { AosInit } from '@/components/AosInit';
 import { SessionGuard } from '@/components/SessionGuard';
+import { LayoutShell } from '@/components/LayoutShell'; 
+
+// [FIX] Use the Client Wrapper to prevent "ssr: false" build errors
+import { PostHogWrapper } from '@/components/providers/PostHogWrapper';
 
 export const metadata: Metadata = {
   title: "PixelSolutions | Custom Web Development",
@@ -24,7 +27,6 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         {/* --- ICONS --- */}
-        {/* Use CSS version instead of JS to prevent hydration mismatch */}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.css" />
         
@@ -38,12 +40,19 @@ export default function RootLayout({
         <link href="/assets/css/styles.css" rel="stylesheet" />
       </head>
       <body id="page-top">
-        <Header />
-        {children}
-        <ChatWidget />
-        <Footer />
-        <ScrollToTop />
-        <CookieBanner /> {/* 👈 Component Added */}
+        {/* 🛡️ Wrap in PostHogWrapper (Handles Provider + PageView Tracking) */}
+        <PostHogWrapper>
+           <AosInit />
+            <SessionGuard />
+            
+            {/* 🛡️ SHELL: This conditionally renders Header/Footer */}
+            <LayoutShell>
+                {children}
+            </LayoutShell>
+
+            <ScrollToTop />
+            <CookieBanner />
+        </PostHogWrapper>
       </body>
     </html>
   );

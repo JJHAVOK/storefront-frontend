@@ -44,7 +44,7 @@ export function Footer() {
 
         <div className="footer-copyright-row">
             <div className="container">
-                <p className="copyright-info">© 2025 PixelSolutions DEV. All rights reserved. | Full-Stack Custom Development Experts.</p>
+                <p className="copyright-info">© 2025 PixelSolutions DEV. All rights reserved. | Full-Stack Custom Development Experts. 'Lead: Jaime'</p>
             </div>
         </div>
     </footer>

@@ -14,7 +14,7 @@ export default function AboutPage() {
             <div className="story-grid">
                 <div className="story-text">
                     <h2 className="section-title-left">Our Mission, Our Story</h2>
-                    <p className="lead-paragraph">Founded in 2018, AURA DEV emerged from the desire to bridge the gap between high-level business strategy and robust, scalable technology implementation. We saw too many companies settle for off-the-shelf solutions that limited growth.</p>
+                    <p className="lead-paragraph">Founded in 2025, PixelForgeSolutions emerged from the desire to bridge the gap between high-level business strategy and robust, scalable technology implementation. We saw too many companies settle for off-the-shelf solutions that limited growth.</p>
                     <p>Our approach is centered around a deep technical consultancy phase, ensuring every line of code serves a strategic business purpose. We don&apos;t just write code; we architect <strong>future-proof digital ecosystems</strong> designed for resilience and market adaptability. This dedication to end-to-end quality has defined our journey.</p>
                 </div>
                 <div className="story-image">
@@ -64,21 +64,21 @@ export default function AboutPage() {
             <div className="team-grid">
                 <div className="team-member">
                     <div className="member-image-placeholder"></div>
-                    <h3>Alexandria V.</h3>
+                    <h3>Jaime J.</h3>
                     <span className="member-title">CEO & Lead Architect</span>
                     <p>Visionary behind the AURA methodology, specializing in high-frequency trading platforms.</p>
                 </div>
                 <div className="team-member">
                     <div className="member-image-placeholder"></div>
-                    <h3>Ben K.</h3>
-                    <span className="member-title">CTO & Infrastructure Head</span>
-                    <p>Oversees cloud resilience and global deployment strategies across AWS and Azure ecosystems.</p>
+                    <h3>PlaceHolder L.</h3>
+                    <span className="member-title">NA & Loreim Loreim</span>
+                    <p>Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim. </p>
                 </div>
                 <div className="team-member">
                     <div className="member-image-placeholder"></div>
-                    <h3>Sarah M.</h3>
-                    <span className="member-title">Head of Product & UX</span>
-                    <p>Ensures that technical power is always paired with intuitive, user-centric front-end design.</p>
+                    <h3>PlaceHolder M.</h3>
+                    <span className="member-title">Loreim Loreim & NA</span>
+                    <p>Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim Loreim.</p>
                 </div>
             </div>
         </div>
