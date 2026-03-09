@@ -2225,3 +2225,29 @@ div.breadcrumb-container, section.breadcrumb-container {
     color: var(--color-white) !important;
     font-size: 1.2rem;
 }
+/* =========================================================
+   🔥 ICON VISIBILITY OVERRIDES (Cart & Profile Upload) 🔥
+   ========================================================= */
+i.fa-shopping-cart, 
+i.fa-camera, 
+i.fa-upload {
+    color: #ffffff !important;
+    font-size: 1.25rem !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Ensure the cart button wrapper allows the icon to show */
+.header .btn[href="/cart"] {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Profile Upload Button explicitly */
+.btn-primary.rounded-circle i.fas {
+    color: #ffffff !important;
+    font-size: 1.2rem !important;
+}
