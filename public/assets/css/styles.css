@@ -2074,11 +2074,10 @@ textarea {
 
 
 /* =========================================================
-   🔥 V2 ENHANCED: GLOBAL DARK MODE & GLASSMORPHISM OVERRIDES 🔥
-   Targets Dashboard, About Us, Cart, Modals, and Inline React Styles
+   🔥 V3 FINAL: GLOBAL DARK MODE & ICON FIXES 🔥
    ========================================================= */
 
-/* 1. Layout Separators (Top Bar, Breadcrumb, Footer, About Us Sections) */
+/* 1. Layout Separators */
 .top-bar { border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important; }
 .main-footer { background-color: #030303 !important; border-top: 1px solid rgba(255, 255, 255, 0.08) !important; }
 .breadcrumb-container { background-color: #0a0a0c !important; border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important; }
@@ -2089,16 +2088,12 @@ textarea {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
     padding-top: 80px !important; padding-bottom: 80px !important;
 }
-.values { background-color: #0d0d0f !important; } /* Alternate dark shade for separation */
+.values { background-color: #0d0d0f !important; }
 
-/* 2. Header & Icons (Cart, Scroll to Top) */
+/* 2. Header & Scroll to Top Buttons */
 .header .btn-outline-secondary, .header .btn[href="/cart"], .header .dropdown-toggle {
     background-color: rgba(255, 255, 255, 0.05) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: var(--color-white) !important;
-}
-.header .btn i, .header .btn-outline-secondary i, .header .dropdown-toggle i, #scrollToTopBtn i { 
-    color: var(--color-white) !important; 
 }
 #scrollToTopBtn { 
     background-color: rgba(255,255,255,0.1) !important; 
@@ -2107,18 +2102,12 @@ textarea {
 }
 
 /* 3. Global Backgrounds & Text Resets */
-body, main, .projects-catalogue, .body-404, .contact-main {
-    background-color: var(--color-dark-bg) !important;
-}
-p, .lead-paragraph, .text-muted, span.text-muted, .breadcrumb, .accordion-panel p { 
-    color: var(--color-text) !important; 
-}
-h1, h2, h3, h4, h5, h6, .text-dark, .fs-5, .fs-4, .fw-bold { 
-    color: var(--color-white) !important; 
-}
+body, main, .projects-catalogue, .body-404, .contact-main { background-color: var(--color-dark-bg) !important; }
+p, .lead-paragraph, .text-muted, span.text-muted, .accordion-panel p { color: var(--color-text) !important; }
+h1, h2, h3, h4, h5, h6, .text-dark, .fs-5, .fs-4, .fw-bold { color: var(--color-white) !important; }
 .bg-white, .bg-light { background-color: transparent !important; }
 
-/* 4. The "Everything Card" Nuke (Dashboard, Cart, About Boxes) */
+/* 4. The "Everything Card" Nuke */
 .card, .projects-sidebar, .project-card, .error-container, .story-accordion, .contact-form-section, .info-block, .modal-content, .dropdown-menu, .login__form, .search-box {
     background-color: rgba(255, 255, 255, 0.03) !important;
     backdrop-filter: blur(12px) !important;
@@ -2128,126 +2117,63 @@ h1, h2, h3, h4, h5, h6, .text-dark, .fs-5, .fs-4, .fw-bold {
     border-radius: 12px !important;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
 }
-
-/* Sub-elements inside Cards (Headers, Bodies, Lists) */
 .card-body, .card-header, .list-group-item, .accordion-panel {
     background-color: transparent !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
-    color: var(--color-white) !important;
 }
 .card-header { border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
 hr, .dropdown-divider { border-color: rgba(255,255,255,0.1) !important; }
 
-/* 5. Inputs & Inline React Styles (Shop Search, Selects) */
+/* 5. Inputs & Inline React Styles */
 input, textarea, select, .login__input, .form-control, .form-select, .input-group {
     background-color: rgba(255, 255, 255, 0.05) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     color: var(--color-white) !important;
 }
-/* Aggressive override for React inline styles (e.g. style="background-color: rgb(243, 243, 243)") */
-div[style*="background-color: rgb(243, 243, 243)"], 
-div[style*="background-color: #f3f3f3"],
-.input-group-text {
+div[style*="background-color: rgb(243, 243, 243)"], div[style*="background-color: #f3f3f3"], .input-group-text {
     background-color: transparent !important;
     border-color: transparent !important;
 }
 
-/* 6. Projects Page Sidebar Filters */
+/* 6. Projects Page Sidebar Filters (RESTORED!) */
 .projects-sidebar label, .filter-group label, .filter-group h4 { 
     color: #cccccc !important; 
     font-weight: 500;
 }
 .projects-sidebar label:hover { color: var(--color-primary) !important; }
 
-/* 7. Fix Hover States for Dropdowns and Project Cards */
+/* 7. Fix Hover States */
 .dropdown-item:hover, .list-group-item:hover, .project-card:hover {
     background-color: rgba(255, 255, 255, 0.08) !important;
-    color: var(--color-white) !important;
 }
-.project-card:hover {
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    transform: translateY(-5px);
-}
+.project-card:hover { border-color: rgba(255, 255, 255, 0.2) !important; transform: translateY(-5px); }
 
 /* 8. Dashboard Settings Tabs Override */
-.nav-tabs {
-    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
-}
-.nav-tabs .nav-link, .nav-tabs .nav-item.show .nav-link {
-    color: var(--color-text) !important;
-    background-color: transparent !important;
-    border: none !important;
-}
-.nav-tabs .nav-link:hover {
-    color: var(--color-white) !important;
-    background-color: rgba(255,255,255,0.05) !important;
-}
+.nav-tabs { border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
+.nav-tabs .nav-link { color: var(--color-text) !important; background-color: transparent !important; border: none !important; }
+.nav-tabs .nav-link:hover { color: var(--color-white) !important; background-color: rgba(255,255,255,0.05) !important; }
 .nav-tabs .nav-link.active {
     color: var(--color-primary) !important;
     background-color: rgba(255,255,255,0.08) !important;
     border-bottom: 2px solid var(--color-primary) !important;
 }
 
-/* 9. Nuke All Inline White Backgrounds & Story Sections */
-[class*="bg-white"], .bg-white, .story-grid, .story-image {
-    background-color: transparent !important;
-}
-.story, .story-projects {
-    background-color: var(--color-dark-bg) !important;
-}
+/* 9. Nuke Inline Backgrounds */
+[class*="bg-white"], .story-grid, .story-image { background-color: transparent !important; }
 
-/* 10. Force Breadcrumb Container */
-div.breadcrumb-container, section.breadcrumb-container {
-    background-color: var(--color-dark-bg) !important;
-}
-
-/* 11. Force Icon Visibility (Cart, Upload, Scroll-to-Top) */
-.header .btn[href="/cart"] i, 
-.fa-shopping-cart, 
-.fa-camera, 
-.fa-upload,
-#scrollToTopBtn i {
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    color: var(--color-white) !important;
-    z-index: 10;
-}
-
-/* Ensure the circular buttons have a proper glass background so the white icon pops */
-.header .btn[href="/cart"] {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-/* Dashboard Profile Upload Button Fix */
-.position-relative .btn-primary.rounded-circle i {
-    color: var(--color-white) !important;
-    font-size: 1.2rem;
-}
-/* =========================================================
-   🔥 ICON VISIBILITY OVERRIDES (Cart & Profile Upload) 🔥
-   ========================================================= */
-i.fa-shopping-cart, 
-i.fa-camera, 
-i.fa-upload {
+/* 10. 🚀 ICON VISIBILITY BUG FIX (Restores FontAwesome glyphs) 🚀 */
+i.fas, i.fa, i.fa-shopping-cart, i.fa-camera, i.fa-upload, .header .btn i, #scrollToTopBtn i {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
     color: #ffffff !important;
-    font-size: 1.25rem !important;
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
 }
 
-/* Ensure the cart button wrapper allows the icon to show */
-.header .btn[href="/cart"] {
+/* Ensure the cart/upload button wrappers center the icon correctly */
+.header .btn[href="/cart"], .btn-primary.rounded-circle {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Profile Upload Button explicitly */
-.btn-primary.rounded-circle i.fas {
-    color: #ffffff !important;
-    font-size: 1.2rem !important;
 }
