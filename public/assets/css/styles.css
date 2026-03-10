@@ -2177,3 +2177,20 @@ i.fas, i.fa, i.fa-shopping-cart, i.fa-camera, i.fa-upload, .header .btn i, #scro
     align-items: center !important;
     justify-content: center !important;
 }
+
+/* =========================================================
+   🔥 FINAL STORY & ABOUT US BACKGROUND FIX 🔥
+   ========================================================= */
+.story, .story-projects {
+    background-color: var(--color-dark-bg) !important;
+    color: var(--color-text) !important;
+}
+
+.story h2, .story-projects h2, .story h3, .story-projects h3 {
+    color: var(--color-white) !important;
+}
+
+/* Ensure the wrapper inside doesn't have a hidden white background */
+.story-grid, .story-image, .about-hero {
+    background-color: transparent !important;
+}
