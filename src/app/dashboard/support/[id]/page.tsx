@@ -24,8 +24,16 @@ export default function SupportDetail() {
           const t = res.data.find((x: any) => x.id === id);
           if (t) {
               setTicket(t);
-              // Load full details (messages)
-              api.get(`/customer/portal/tickets/${id}`).then(d => setMessages(d.data.messages || []));
+              // Load full details (messages) and map the sender property!
+              api.get(`/customer/portal/tickets/${id}`).then(d => {
+                  const rawMessages = d.data.messages || [];
+                  const mappedMessages = rawMessages.map((m: any) => ({
+                      ...m, // Keep all original properties
+                      // Translate the database staffUserId into a sender label
+                      sender: m.staffUserId ? 'STAFF' : 'CUSTOMER'
+                  }));
+                  setMessages(mappedMessages);
+              });
           }
       });
   }, [id]);

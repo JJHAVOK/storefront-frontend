@@ -255,18 +255,22 @@ export function ChatWidget() {
 
   const handleSend = async () => {
     if (!input.trim()) return;
-    const tempMsg = { id: 'temp-'+Date.now(), content: input, sender: 'CUSTOMER', createdAt: new Date().toISOString() };
+    
+    const currentInput = input;
+    setInput(''); // Clear input for snappy UX
+
+    const tempMsg = { id: 'temp-'+Date.now(), content: currentInput, sender: 'CUSTOMER', createdAt: new Date().toISOString() };
     setMessages(prev => [...prev, tempMsg]);
 
     const tid = activeTicket || ticketId;
     if (tid) {
         if (socket && socket.connected) {
-            socket.emit('send_message', { ticketId: tid, content: input });
+            socket.emit('send_message', { ticketId: tid, content: currentInput });
         } else {
-            // [FIX] Use api.post directly (Cookies handled automatically)
-            await api.post('/chat/messages', { ticketId: tid, content: input });
+            // Pointing to the NEW REST Fallback endpoint!
+            await api.post(`/customer/portal/tickets/${tid}/messages`, { content: currentInput })
+              .catch(err => console.log('REST Fallback failed:', err));
         }
-        setInput('');
     }
   };
 
