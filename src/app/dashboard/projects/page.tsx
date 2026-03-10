@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
+import Link from 'next/link';
 
 export default function MyProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -25,41 +26,18 @@ export default function MyProjectsPage() {
          <div className="row">
             {projects.map(p => (
                <div className="col-12 mb-4" key={p.id}>
-                  <div className="card shadow-sm">
-                     <div className="card-header d-flex justify-content-between align-items-center bg-white">
-                        <h5 className="m-0">{p.name}</h5>
-                        <span className="badge bg-info text-dark">{p.status}</span>
+                  <div className="card shadow-sm border-0">
+                     <div className="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                        <h5 className="m-0 fw-bold">{p.name}</h5>
+                        <span className="badge bg-primary">{p.status}</span>
                      </div>
                      <div className="card-body">
-                        <p>{p.description}</p>
+                        <p className="text-muted">{p.description || 'No description provided.'}</p>
                         
-                        <h6 className="mt-4 border-bottom pb-2">Timeline & Updates</h6>
-                        {p.updates && p.updates.length > 0 ? (
-                           <ul className="list-group list-group-flush">
-                              {p.updates.map((u: any) => (
-                                 <li className="list-group-item" key={u.id}>
-                                    <div className="d-flex w-100 justify-content-between">
-                                      <h6 className="mb-1">{u.title}</h6>
-                                      <small>{new Date(u.createdAt).toLocaleDateString()}</small>
-                                    </div>
-                                    <p className="mb-1 text-muted small">{u.description}</p>
-                                 </li>
-                              ))}
-                           </ul>
-                        ) : <p className="text-muted small">No updates posted yet.</p>}
-
-                        <h6 className="mt-4 border-bottom pb-2">Progress Board</h6>
-                        <div className="d-flex overflow-auto gap-3 pb-3">
-                           {p.columns.map((col: any) => (
-                              <div key={col.id} style={{ minWidth: '200px' }} className="bg-light p-2 rounded border">
-                                 <strong className="d-block mb-2 text-center">{col.name}</strong>
-                                 {col.tasks.map((t: any) => (
-                                    <div key={t.id} className="card mb-2 p-2 small shadow-sm border-0">
-                                       {t.title}
-                                    </div>
-                                 ))}
-                              </div>
-                           ))}
+                        <div className="d-flex justify-content-end mt-3">
+                           <Link href={`/dashboard/projects/${p.id}`} className="btn btn-outline-primary">
+                             View Project Details <i className="fas fa-arrow-right ms-2"></i>
+                           </Link>
                         </div>
                      </div>
                   </div>
